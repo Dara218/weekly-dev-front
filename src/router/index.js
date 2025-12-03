@@ -1,0 +1,15 @@
+import LandingPage from '@/views/pages/LandingPage.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      name: 'landing-page',
+      component: LandingPage,
+    }
+  ],
+})
+
+export default router;
