@@ -1,0 +1,11 @@
+/* Form container */
+
+/* Form container for card page. Sample: Login and Reset Password */
+.card-container-form {
+  @apply mt-8 space-y-6 bg-white p-8 rounded-lg shadow-md;
+}
+
+/* 2 button containers. Sample is Login form */
+.button-container-2  {
+  @apply flex flex-col sm:flex-row gap-3;
+}

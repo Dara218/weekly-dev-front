@@ -1,3 +1,24 @@
-.text-red-sample {
-  @apply text-red-500;
+/* Validation message */
+.error-message {
+  @apply text-red-500 font-bold text-sm text-center;
+}
+
+/* Success message */
+.success-message {
+  @apply text-green-500 font-bold text-sm text-center;
+}
+
+/* Page title */
+.page-title {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+/* Form label */
+.form-label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+/* Form textbox */
+.form-checkbox-label {
+  @apply ml-2 block text-sm text-gray-900;
 }
