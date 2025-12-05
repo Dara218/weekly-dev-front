@@ -1,0 +1,6 @@
+/* Wrapper inside the container */
+
+/* Wrapper for card-page-container */
+.card-page-wrapper {
+  @apply max-w-md w-full space-y-8;
+}
