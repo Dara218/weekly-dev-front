@@ -1,6 +1,6 @@
 /* Validation message */
 .error-message {
-  @apply text-red-500 font-bold text-sm text-center;
+  @apply text-red-500 font-bold text-sm;
 }
 
 /* Success message */
