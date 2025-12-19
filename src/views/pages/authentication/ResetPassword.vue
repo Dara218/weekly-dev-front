@@ -3,7 +3,7 @@
     <div class="card-page-wrapper">
       <!-- Header -->
       <div class="text-center">
-        <h1 class="page-title">FORGOT PASSWORD</h1>
+        <h1 class="page-title">{{ LABEL.HEADER.FORGOT_PASSWORD }}</h1>
       </div>
 
       <!-- Form -->
@@ -12,7 +12,7 @@
           <!-- Email Field -->
           <div>
             <label for="email" class="form-label">
-              Email
+              {{ LABEL.EMAIL }}
             </label>
             <input
               type="email"
@@ -20,15 +20,15 @@
               id="email"
               required
               class="input-field"
-              placeholder="Enter your email"
+              :placeholder="LABEL.PLACEHOLDER.EMAIL"
             />
           </div>
         </div>
 
         <!-- Success Message -->
-        <p v-if="successMessage" class="success-message">
+        <!-- <p v-if="successMessage" class="success-message">
           {{ successMessage }}
-        </p>
+        </p> -->
 
         <!-- Buttons -->
         <div class="button-container-2">
@@ -36,13 +36,13 @@
             type="submit"
             class="button-submit"
           >
-            Send Reset Link
+            {{ LABEL.BUTTON.PASSWORD_RESET_LINK }}
           </button>
           <router-link
             to="/login"
             class="button-common"
           >
-            Back to Login
+            {{ LABEL.BUTTON.BACK_TO_LOGIN }}
           </router-link>
         </div>
       </form>
@@ -51,5 +51,7 @@
 </template>
 
 <script setup>
+  import { LABEL } from '@/constants/label';
+
   // 
 </script>

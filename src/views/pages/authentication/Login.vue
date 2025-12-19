@@ -3,58 +3,47 @@
     <div class="card-page-wrapper">
       <!-- Header -->
       <div class="text-center">
-        <h1 class="page-title">SCHOOL LOGIN</h1>
+        <h1 class="page-title">{{ LABEL.HEADER.SCHOOL_LOGIN }}</h1>
       </div>
 
       <!-- Form -->
-      <form @submit.prevent="handleLogin" class="card-container-form">
+      <form @submit.prevent="login" class="card-container-form">
         <div class="space-y-4">
           <!-- Email Field -->
           <div>
             <label for="email" class="form-label">
-              Email
+              {{ LABEL.EMAIL }}
             </label>
             <input
-              type="email"
+              v-model="form.email"
+              type="text"
               name="email"
               id="email"
-              required
               class="input-field"
-              placeholder="Enter your email"
+              :placeholder="LABEL.PLACEHOLDER.EMAIL"
             />
+            <p v-if="v$.email.$error" class="error-message">{{ v$.email.$errors[0].$message }}</p>
           </div>
 
           <!-- Password Field -->
           <div>
             <label for="password" class="form-label">
-              Password
+              {{ LABEL.PASSWORD }}
             </label>
             <input
+              v-model="form.password"
               type="password"
               name="password"
               id="password"
-              required
               class="input-field"
-              placeholder="Enter your password"
+              :placeholder="LABEL.PLACEHOLDER.PASSWORD"
             />
-          </div>
-
-          <!-- Remember Me -->
-          <div class="flex items-center">
-            <input
-              id="remember"
-              name="remember"
-              type="checkbox"
-              class="checkbox-field"
-            />
-            <label for="remember" class="form-checkbox-label">
-              Remember Me
-            </label>
+            <p v-if="v$.password.$error" class="error-message">{{ v$.password.$errors[0].$message }}</p>
           </div>
         </div>
 
         <!-- Error Message -->
-        <p v-if="errorMessage" class="error-message">
+        <p v-if="errorMessage" class="error-message text-center!">
           {{ errorMessage }}
         </p>
 
@@ -63,14 +52,15 @@
           <button
             type="submit"
             class="button-submit"
+            :disabled="isButtonSubmitted"
           >
-            Login
+            {{ LABEL.BUTTON.LOGIN }}
           </button>
           <router-link
             to="/reset-password"
             class="button-common"
           >
-            Forgot Password
+            {{ LABEL.BUTTON.FORGOT_PASSWORD }}
           </router-link>
         </div>
       </form>
@@ -79,5 +69,14 @@
 </template>
 
 <script setup>
-  //
+  import { useLoginUser } from '@/composables/useLoginUser';
+  import { LABEL } from '@/constants/label';
+  import { reactive } from 'vue';
+
+  const form = reactive({
+    email: '',
+    password: '',
+  })
+
+  const { login, v$, errorMessage, isButtonSubmitted } = useLoginUser(form);
 </script>
