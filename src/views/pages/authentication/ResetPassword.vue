@@ -40,7 +40,7 @@
           </button>
           <router-link
             to="/login"
-            class="button-common"
+            class="button-common-navigation"
           >
             {{ LABEL.BUTTON.BACK_TO_LOGIN }}
           </router-link>
@@ -53,5 +53,5 @@
 <script setup>
   import { LABEL } from '@/constants/label';
 
-  // 
+  //
 </script>

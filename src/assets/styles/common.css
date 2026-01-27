@@ -1,0 +1,14 @@
+/* Common styles */
+.flex-center-between {
+  @apply flex items-center justify-between mb-6;
+}
+
+/* Sample: <element> <element> <element>*/
+.element-gap {
+  @apply max-w-7xl mx-auto mb-3 flex flex-wrap gap-2;
+}
+
+/* Spinner */
+.spinner {
+  @apply inline-block h-8 w-8 rounded-full border-4 border-gray-200 border-t-blue-500 animate-spin;
+}
