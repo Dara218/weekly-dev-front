@@ -58,7 +58,7 @@
           </button>
           <router-link
             to="/reset-password"
-            class="button-common"
+            class="button-common-navigation"
           >
             {{ LABEL.BUTTON.FORGOT_PASSWORD }}
           </router-link>

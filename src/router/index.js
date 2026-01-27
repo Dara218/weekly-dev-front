@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { USER_ROLE } from '@/constants/userRole';
 import Login from '@/views/pages/authentication/Login.vue';
 import AdminDashboard from '@/views/pages/admin/AdminDashboard.vue';
+import StudentList from '@/views/pages/admin/StudentList.vue';
 import ResetPassword from '@/views/pages/authentication/ResetPassword.vue';
 import ParentDashboard from '@/views/pages/parent/ParentDashboard.vue';
 import StudentDashboard from '@/views/pages/student/StudentDashboard.vue';
@@ -44,6 +45,15 @@ const router = createRouter({
         role: USER_ROLE.ADMIN,
       },
     },
+    {
+      path: '/students',
+      name: 'student-list',
+      component: StudentList,
+      meta: {
+        requiresAuth: true,
+        role: [USER_ROLE.ADMIN, USER_ROLE.TEACHER],
+      },
+    },
     // Teacher routes
     {
       path: '/teacher/dashboard',
@@ -80,8 +90,10 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // If authenticated user access other role page
-  if (to.meta.requiresAuth && auth.isAuthenticated) {
-    if (userRole !== to.meta.role) {
+  if (to.meta.requiresAuth && auth.isAuthenticated && to.meta.role) {
+    const allowedRoles = Array.isArray(to.meta.role) ? to.meta.role : [to.meta.role];
+
+    if (!allowedRoles.includes(userRole)) {
       if (auth.isStudent) next({ path: '/student/dashboard'});
       if (auth.isAdmin) next({ path: '/admin/dashboard'});
       if (auth.isTeacher) next({ path: '/teacher/dashboard'});

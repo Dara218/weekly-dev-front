@@ -6,4 +6,7 @@ export const API_ENDPOINT = {
   USER: {
     GET_AUTH_USER: 'api/user',
   },
+  STUDENT: {
+    GET_STUDENT: 'api/students',
+  },
 };

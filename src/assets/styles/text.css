@@ -22,3 +22,33 @@
 .form-checkbox-label {
   @apply ml-2 block text-sm text-gray-900;
 }
+
+/* 2xl large text */
+.text-large-2xl {
+  @apply text-2xl font-semibold text-gray-900 tracking-tight;
+}
+
+/* Row filter label  */
+.row-filter-label {
+  @apply block text-xs font-medium text-gray-700 mb-1;
+}
+
+/* Active Status (With Green background color) */
+.active-text {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800;
+}
+
+/* Link Indigo */
+.link-indigo {
+  @apply text-indigo-600 hover:text-indigo-800 font-medium;
+}
+
+/* Link Blue */
+.link-blue {
+  @apply text-blue-600 hover:text-blue-800 font-medium;
+}
+
+/* Link Red */
+.link-red {
+  @apply text-red-600 hover:text-red-800 font-medium;
+}
