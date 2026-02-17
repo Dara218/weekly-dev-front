@@ -7,15 +7,15 @@ import { USER_ROLE } from "@/constants/userRole";
 
 /**
  * Composable function for handling user login functionality.
- * 
+ *
  * Provides form validation, login submission, and error handling for the login form.
  * Uses Vuelidate for form validation and the auth store for authentication.
- * 
+ *
  * @param {import('vue').Reactive<{
  *   email: string,
  *   password: string,
  * }>} form - Reactive form object containing login credentials
- * 
+ *
  * @returns {{
  *   login: () => Promise<void>,
  *   errorMessage: import('vue').Ref<string>,
@@ -23,7 +23,7 @@ import { USER_ROLE } from "@/constants/userRole";
  * }}
  */
 export const useLoginUser = (form) => {
-  const isButtonSubmitted = ref(false);
+  const isSubmitBtnClicked = ref(false);
   const errorMessage = ref('');
 
   const rules = computed(() => {
@@ -34,15 +34,20 @@ export const useLoginUser = (form) => {
   });
   const v$ = useVuelidate(rules, form);
 
+  /**
+   * Validates and submits the login form.
+   *
+   * @returns {Promise<void>} Resolves when login flow completes.
+   */
   const login = async () => {
     // Disable button
-    isButtonSubmitted.value = true;
-    
+    isSubmitBtnClicked.value = true;
+
     const isFormValidated = await v$.value.$validate();
 
     if (!isFormValidated) {
-      isButtonSubmitted.value = false;
-  
+      isSubmitBtnClicked.value = false;
+
       return;
     };
 
@@ -56,12 +61,17 @@ export const useLoginUser = (form) => {
     } catch (error) {
       form.password = null;
       v$.value.password.$reset();
-      isButtonSubmitted.value = false;
+      isSubmitBtnClicked.value = false;
 
       errorMessage.value = error.message;
     }
   };
 
+  /**
+   * Routes the user to the correct dashboard by role.
+   *
+   * @param {string} role - User role value.
+   */
   const checkUserRole = (role) => {
     switch (role) {
       case USER_ROLE.STUDENT:
@@ -89,6 +99,6 @@ export const useLoginUser = (form) => {
     login,
     errorMessage,
     v$,
-    isButtonSubmitted,
+    isSubmitBtnClicked,
   };
 };

@@ -12,3 +12,56 @@
 .spinner {
   @apply inline-block h-8 w-8 rounded-full border-4 border-gray-200 border-t-blue-500 animate-spin;
 }
+
+/* Modal specific */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50;
+}
+
+.modal-container {
+  @apply bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden;
+}
+
+.modal-header {
+  @apply bg-white border-b border-gray-200 px-6 py-4 shrink-0;
+}
+
+.modal-content {
+  @apply px-6 py-6 space-y-6 overflow-y-auto flex-1;
+}
+
+.modal-footer {
+  @apply bg-gray-50 border-t border-gray-200 px-6 py-4 shrink-0 flex justify-between;
+}
+
+.modal-divider {
+  @apply border-t border-gray-200;
+}
+
+/* Info box */
+.info-box-blue {
+  @apply bg-blue-50 border border-blue-200 rounded-md p-4 space-y-1;
+}
+
+.info-text-blue {
+  @apply text-sm text-blue-800;
+}
+
+/* Filter field wrapper */
+.filter-field-wrapper {
+  @apply relative flex items-center;
+}
+
+/* Hide native select arrow */
+.filter-field-wrapper select {
+  @apply appearance-none pr-8;
+}
+
+/* Clear icon position */
+.filter-clear-icon {
+  @apply absolute right-2 flex items-center cursor-pointer text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+.filter-clear-icon svg {
+  @apply w-3.5 h-3.5;
+}

@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { USER_ROLE } from '@/constants/userRole';
 import Login from '@/views/pages/authentication/Login.vue';
 import AdminDashboard from '@/views/pages/admin/AdminDashboard.vue';
-import StudentList from '@/views/pages/admin/StudentList.vue';
+import StudentList from '@/views/pages/teacher/StudentList.vue';
 import ResetPassword from '@/views/pages/authentication/ResetPassword.vue';
 import ParentDashboard from '@/views/pages/parent/ParentDashboard.vue';
 import StudentDashboard from '@/views/pages/student/StudentDashboard.vue';
