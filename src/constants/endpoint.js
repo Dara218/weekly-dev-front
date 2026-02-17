@@ -5,8 +5,12 @@ export const API_ENDPOINT = {
   },
   USER: {
     GET_AUTH_USER: 'api/user',
+    CREATE_USER: 'api/user/create'
   },
   STUDENT: {
     GET_STUDENT: 'api/students',
+  },
+  PARENT: {
+    GET_PARENT: 'api/parents',
   },
 };

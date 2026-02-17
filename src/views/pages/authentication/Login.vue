@@ -52,7 +52,7 @@
           <button
             type="submit"
             class="button-submit"
-            :disabled="isButtonSubmitted"
+            :disabled="isSubmitBtnClicked"
           >
             {{ LABEL.BUTTON.LOGIN }}
           </button>
@@ -78,5 +78,5 @@
     password: '',
   })
 
-  const { login, v$, errorMessage, isButtonSubmitted } = useLoginUser(form);
+  const { login, v$, errorMessage, isSubmitBtnClicked } = useLoginUser(form);
 </script>

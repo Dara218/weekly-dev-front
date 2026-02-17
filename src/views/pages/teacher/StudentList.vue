@@ -1,8 +1,15 @@
 <template>
-  <!-- TODO: Re-study login and display dynamic data from database -->
   <div class="page-table-container">
     <!-- Page Header -->
     <div class="page-header-wrapper">
+    <!-- Success Message Banner -->
+      <FlashMessage
+        v-if="flashMessage && flashType"
+        :message="flashMessage"
+        :type="flashType"
+        @close="closeFlashMessage"
+      />
+
       <div class="flex-center-between">
         <h1 class="text-large-2xl">
           {{ LABEL.HEADER.STUDENT }}
@@ -11,110 +18,123 @@
         <button
           type="button"
           class="button-common-action"
+          @click="toggleRegisterModal"
         >
           {{ LABEL.BUTTON.ADD_STUDENT }}
         </button>
       </div>
 
       <!-- Filters Row -->
-      <div
-        class="row-filter-container"
-      >
-        <div
-          class="row-filter-wrapper"
-        >
+      <div class="row-filter-container">
+        <div class="row-filter-wrapper">
+
           <!-- Class -->
           <div>
-            <label class="row-filter-label">
-              {{ LABEL.CLASS }}
-            </label>
-            <select class="selectbox-field" v-model="searchKeywords.class" @change="search">
-              <option value="0" disabled>{{ LABEL.SELECT_BOX.SELECT_CLASS }}</option>
-              <option v-for="year in classes"
-                :key="year.id"
-                :value="year.id"
-              >
-                {{ year.name.replaceAll('_', ' ') }}
-              </option>
-            </select>
+            <label class="row-filter-label">{{ LABEL.CLASS }}</label>
+            <div class="filter-field-wrapper">
+              <select class="selectbox-field" v-model="searchKeywords.class" @change="search">
+                <option value="0" disabled>{{ LABEL.SELECT_BOX.SELECT_CLASS }}</option>
+                <option v-for="year in classes" :key="year.id" :value="year.id">
+                  {{ year.name.replaceAll('_', ' ') }}
+                </option>
+              </select>
+              <span class="filter-clear-icon" @click="search('class')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </div>
           </div>
 
           <!-- Section -->
           <div>
-            <label class="row-filter-label">
-              {{ LABEL.SECTION }}
-            </label>
-            <select class="selectbox-field" v-model="searchKeywords.section" @change="search">
-              <option value="0" disabled>{{ LABEL.SELECT_BOX.SELECT_SECTION }}</option>
-              <option v-for="section in sections"
-                :key="section.id"
-                :value="section.id"
-              >
+            <label class="row-filter-label">{{ LABEL.SECTION }}</label>
+            <div class="filter-field-wrapper">
+              <select class="selectbox-field" v-model="searchKeywords.section" @change="search">
+                <option value="0" disabled>{{ LABEL.SELECT_BOX.SELECT_SECTION }}</option>
+                <option v-for="section in sections" :key="section.id" :value="section.id">
                   {{ section.section_name }}
-              </option>
-            </select>
+                </option>
+              </select>
+              <span class="filter-clear-icon" @click="search('section')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </div>
           </div>
 
           <!-- Gender -->
           <div>
-            <label class="row-filter-label">
-              {{ LABEL.GENDER }}
-            </label>
-            <select class="selectbox-field" v-model="searchKeywords.gender" @change="search">
-              <option value="0" disabled>{{ LABEL.SELECT_BOX.SELECT_GENDER }}</option>
-              <option v-for="gender in LABEL.SELECT_BOX.OPTIONS.GENDER"
-                :key="gender.value"
-                :value="gender.value"
-              >
-                {{ gender.label }}
-              </option>
-            </select>
+            <label class="row-filter-label">{{ LABEL.GENDER }}</label>
+            <div class="filter-field-wrapper">
+              <select class="selectbox-field" v-model="searchKeywords.gender" @change="search">
+                <option value="0" disabled>{{ LABEL.SELECT_BOX.SELECT_GENDER }}</option>
+                <option v-for="gender in LABEL.OPTIONS.GENDER" :key="gender.value" :value="gender.value">
+                  {{ gender.label }}
+                </option>
+              </select>
+              <span class="filter-clear-icon" @click="search('gender')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </div>
           </div>
 
           <!-- Status -->
           <div>
-            <label class="row-filter-label">
-              {{ LABEL.STATUS }}
-            </label>
-            <select class="selectbox-field" v-model="searchKeywords.status" @change="search">
-              <option value="0" disabled>{{ LABEL.SELECT_BOX.SELECT_STATUS }}</option>
-              <option v-for="option in LABEL.SELECT_BOX.OPTIONS.STATUS"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </option>
-            </select>
+            <label class="row-filter-label">{{ LABEL.STATUS }}</label>
+            <div class="filter-field-wrapper">
+              <select class="selectbox-field" v-model="searchKeywords.status" @change="search">
+                <option value="3" disabled>{{ LABEL.SELECT_BOX.SELECT_STATUS }}</option>
+                <option v-for="option in LABEL.OPTIONS.STATUS" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+              <span class="filter-clear-icon" @click="search('status')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </div>
           </div>
 
           <!-- Admission Year -->
           <div>
-            <label class="row-filter-label">
-              {{ LABEL.ADMISSION_YEAR }}
-            </label>
-            <select class="selectbox-field" v-model="searchKeywords.admission_year" @change="search">
-              <option value="0" disabled>Select Year</option>
-              <option v-for="admissionYear in admissionYears"
-                :key="admissionYear.id"
-                :value="admissionYear.name"
-              >
+            <label class="row-filter-label">{{ LABEL.ADMISSION_YEAR }}</label>
+            <div class="filter-field-wrapper">
+              <select class="selectbox-field" v-model="searchKeywords.admission_year" @change="search">
+                <option value="0" disabled>Select Year</option>
+                <option v-for="admissionYear in admissionYears" :key="admissionYear.id" :value="admissionYear.name">
                   {{ admissionYear.name }}
                 </option>
-            </select>
+              </select>
+              <span class="filter-clear-icon" @click="search('admission_year')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </div>
           </div>
 
           <!-- Search -->
           <div>
-            <label class="row-filter-label">
-              {{ LABEL.SEARCH }}
-            </label>
-            <input
-              type="text"
-              :placeholder="LABEL.PLACEHOLDER.SEARCH_BY_NAME_OR_ADMISSION_NO"
-              class="selectbox-field"
-              v-model="searchKeywords.name_or_admission_number_keyword"
-              @input="debounceSearch"
-            />
+            <label class="row-filter-label">{{ LABEL.SEARCH }}</label>
+            <div class="filter-field-wrapper">
+              <input
+                type="text"
+                :placeholder="LABEL.PLACEHOLDER.SEARCH_BY_NAME_OR_ADMISSION_NO"
+                class="selectbox-field"
+                v-model="searchKeywords.name_or_admission_number_keyword"
+                @input="debounceSearch"
+              />
+              <span class="filter-clear-icon" @click="search('name_or_admission_number_keyword')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -132,6 +152,13 @@
           class="button-common-action"
         >
           {{ LABEL.BUTTON.BULK_UPDATE }}
+        </button>
+        <button
+          type="button"
+          class="button-common-action"
+          @click="search('all')"
+        >
+          {{ LABEL.BUTTON.CLEAR_ALL }}
         </button>
       </div>
 
@@ -154,55 +181,55 @@
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.ADMISSION_NO }}
+                  {{ LABEL.ADMISSION_NO }}
                 </th>
                 <th
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.NAME }}
+                  {{ LABEL.NAME }}
                 </th>
                 <th
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.CLASS_AND_SECTION }}
+                  {{ LABEL.CLASS_AND_SECTION }}
                 </th>
                 <th
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.DOB }}
+                  {{ LABEL.DOB }}
                 </th>
                 <th
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.GENDER }}
+                  {{ LABEL.GENDER }}
                 </th>
                 <th
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.GUARDIAN }}
+                  {{ LABEL.GUARDIAN }}
                 </th>
                 <th
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.PHONE }}
+                  {{ LABEL.PHONE }}
                 </th>
                 <th
                   scope="col"
                   class="table-head"
                 >
-                  {{ LABEL.TABLE.HEADER.STATUS }}
+                  {{ LABEL.STATUS }}
                 </th>
                 <th
                   scope="col"
                   class="table-head px-4 py-3 "
                 >
-                  {{ LABEL.TABLE.HEADER.ACTIONS }}
+                  {{ LABEL.ACTIONS }}
                 </th>
               </tr>
             </thead>
@@ -246,11 +273,11 @@
                     {{ student.parent.user.name }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
-                    {{ student.parent.phone }}
+                    {{ student.phone }}
                   </td>
                   <td class="common-table-data">
                     <span class="active-text">
-                      {{ student.student_status }}
+                      {{ getStudentStatusOption(student.student_status) }}
                     </span>
                   </td>
                   <td class="common-table-data text-sm">
@@ -293,6 +320,19 @@
         </div>
       </div>
     </div>
+
+    <!-- Toggle add student modal -->
+    <AddStudentModal
+      v-if="isOpenRegisterModal"
+      :isOpenRegisterModal="isOpenRegisterModal"
+      @closeModal="toggleRegisterModal"
+      @refreshTable="search"
+      @showFlashMessage="setFlashMessage"
+      :admissionYears="admissionYears"
+      :classes="classes"
+      :sections="sections"
+      :teacher_id="user.id"
+    />
   </div>
 </template>
 
@@ -305,13 +345,21 @@
    */
   import { computed, reactive, ref } from 'vue';
   import { debounce } from 'lodash';
-  import { LABEL } from '@/constants/label';
   import { getStudents } from '@/services/teacher/getStudentsService';
   import { useAuthStore } from '@/stores/useAuthStore';
+  import { LABEL } from '@/constants/label';
+  import { TIMING } from '@/constants/timing';
+  import { CONFIG } from '@/constants/config';
   import Spinner from '@/views/components/Spinner.vue';
+  import AddStudentModal from './components/AddStudentModal.vue';
+  import FlashMessage from '@/views/components/FlashMessage.vue';
+  import { getStudentStatusOption } from '@/composables/useCommonOption';
 
   const isLoading = ref(false);
   const hasSearch = ref(false);
+  const isOpenRegisterModal = ref(false);
+  const flashMessage = ref('');
+  const flashType = ref('');
 
   /**
    * Auth store for the currently logged-in user.
@@ -345,17 +393,23 @@
   );
 
   /**
-   * Reactive object that holds all filter and search keyword values
+   * Default reactive object that holds all filter and search keyword values
    * used when fetching the filtered list of students.
    */
-  const searchKeywords = reactive({
+  const defaultKeywords = {
     class: 0,
     section: 0,
     gender: 0,
-    status: 0,
+    status: 3,
     admission_year: 0,
     name_or_admission_number_keyword: '',
-  });
+  };
+
+  /**
+   * Reactive object that holds all filter and search keyword values
+   * used when fetching the filtered list of students.
+   */
+  const searchKeywords = reactive({ ...defaultKeywords });
 
   /**
    * List of students returned from the API, displayed in the table.
@@ -372,9 +426,20 @@
    * Called when filters change or when the user types in the search box
    * (through the debounced wrapper).
    */
-  const search = async () => {
+  const search = async (field) => {
     isLoading.value = true;
     hasSearch.value = true;
+
+    // Remove the keyword if cleared
+    if (field) {
+      if (field !== 'all') {
+        // Clear all field
+        searchKeywords[field] = defaultKeywords[field];
+      } else {
+        // Clear single field
+        Object.assign(searchKeywords, defaultKeywords);
+      }
+    };
 
     try {
       const response = await getStudents(searchKeywords);
@@ -392,5 +457,30 @@
    * Debounced version of search that delays the API call
    * while the user is still typing in the search input.
    */
-  const debounceSearch = debounce(search, 300); // 300ms
+  const debounceSearch = debounce(search, TIMING.DEBOUNCE); // 300ms
+
+  /**
+   * Shows the student register modal on button click.
+   */
+  const toggleRegisterModal = () => isOpenRegisterModal.value =! isOpenRegisterModal.value;
+
+  /**
+   * Sets the flash message content and type.
+   *
+   * @param {Object} flash - Flash message payload.
+   */
+  const setFlashMessage = (flash) => {
+    flashType.value = flash.success
+      ? CONFIG.FLASH_MESSAGE_TYPE.SUCCESS
+      : CONFIG.FLASH_MESSAGE_TYPE.ERROR;
+    flashMessage.value = flash.message;
+  };
+
+  /**
+   * Closes the flash message when "x" button is clicked.
+   */
+  const closeFlashMessage = () => {
+    flashMessage.value = null;
+    flashType.value = null;
+  }
 </script>
