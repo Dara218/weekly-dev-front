@@ -3,6 +3,7 @@ import {
   helpers,
   maxLength,
   required,
+  requiredIf,
 } from "@vuelidate/validators";
 
 /**
@@ -14,6 +15,17 @@ import {
  */
 export const requiredField = (fieldName) => {
   return helpers.withMessage(`${fieldName} is required.`, required);
+};
+
+/**
+ * Required fields.
+ *
+ * @param {*} fieldName The field name
+ *
+ * @returns string
+ */
+export const requiredIfEnteredField = (fieldName) => {
+  return helpers.withMessage(`${fieldName} is required.`, requiredIf);
 };
 
 /**
@@ -101,7 +113,7 @@ export const passwordField = (fieldName, minLength = 8) => {
   return helpers.withMessage(
     `${fieldName} must be at least ${minLength} characters long and include uppercase, lowercase, number, and special character.`,
     value => {
-      if (!value) return false;
+      if (!value) return true;
 
       // Allow any non-alphanumeric character as special character
       const regex = new RegExp(

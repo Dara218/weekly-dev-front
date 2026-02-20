@@ -3,7 +3,7 @@
     <form @submit.prevent="handleSubmit" class="modal-container">
       <!-- Header -->
       <div class="modal-header">
-        <h2 class="page-title mb-0 uppercase">{{ LABEL.ADD_STUDENT }}</h2>
+        <h2 class="page-title mb-0 uppercase">{{ isEditStudent ? LABEL.EDIT_STUDENT : LABEL.ADD_STUDENT }}</h2>
       </div>
 
       <!-- Form Content - Scrollable -->
@@ -118,11 +118,11 @@
           </div>
 
           <div>
-            <label class="form-label">{{ guardianLabel }}</label>
+            <label class="form-label">{{ parentLabel }}</label>
             <v-select
               @click="fetchParentNames"
               v-model="form.parent_id"
-              :options="guardians"
+              :options="parents"
               label="name"
               :reduce="guardian => guardian.id"
               :placeholder="LABEL.PLACEHOLDER.SEARCH_GUARDIAN_NAME"
@@ -224,12 +224,12 @@
 </template>
 
 <script setup>
-  import { reactive, ref, computed } from 'vue';
+  import { reactive, ref, computed, onMounted } from 'vue';
   import vSelect from 'vue-select'
   import 'vue-select/dist/vue-select.css'
-  import { useCreateUser } from '@/composables/useCreateUser';
+  import { useCreateUser } from '@/composables/useCreateAndUpdateUser';
   import { isModalFieldChanged } from '@/composables/useModal';
-  import { getStudentParents } from '@/composables/useGetParents';
+  import { getParents } from '@/composables/useGetParents';
   import { getGenderValue, getStatusValue } from '@/composables/useCommonOption';
   import { LABEL } from '@/constants/label';
   import { CONFIG } from '@/constants/config';
@@ -241,6 +241,7 @@
     requiredField,
     validDate,
     phoneField,
+    requiredIfEnteredField,
   } from '@/composables/useValidationRules';
   import { cloneDeep } from 'lodash';
   import { USER_ROLE } from '@/constants/userRole';
@@ -255,6 +256,7 @@
     classes: Array,
     sections: Array,
     teacher_id: Number,
+    student: Object,
   });
 
   /**
@@ -266,28 +268,35 @@
     'refreshTable',
   ]);
 
+  onMounted(async () => {
+    if (props.student) {
+      // Pre-populate parents list so v-select can display the name
+      await fetchParentNames();
+    }
+  }); 
+
   /**
    * Returns the default/initial form state.
    *
    * @returns {Object} Default form values
    */
   const defaultForm = () => ({
-    first_name: '',
-    middle_name: '',
-    last_name: '',
-    gender: 0,
-    dob: '',
-    class_id: 0,
-    section_id: 0,
-    admission_no: '',
-    parent_id: '',
-    phone: '',
-    email: '',
+    first_name: props.student?.user?.first_name ?? '',
+    middle_name: props.student?.user?.middle_name ?? '',
+    last_name: props.student?.user?.last_name ?? '',
+    gender: props.student?.gender ?? 0,
+    dob: props.student?.dob ?? '',
+    class_id: props.student?.class_id ?? 0,
+    section_id: props.student?.section_id ?? 0,
+    admission_no: props.student?.admission_no ?? '',
+    parent_id: props.student?.parent_id ?? '',
+    phone: props.student?.phone ?? '',
+    email: props.student?.user?.email ?? '',
     password: '',
-    status: 1,
+    status: props.student?.student_status ?? 1,
     teacher_id: props.teacher_id,
     role: USER_ROLE.STUDENT,
-    address: '',
+    address: props.student?.address ?? '',
   });
 
   /**
@@ -300,9 +309,11 @@
    */
   const initialForm = cloneDeep(form);
 
+  const isEditStudent = computed(() => !!props.student?.user?.id);
+
   // Field labels from constants
-  const guardians = ref([]);
-  const guardianIds = ref([]);
+  const parents = ref([]);
+  const parentIds = ref([]);
   const gradeLevelIds = props.classes.map(grade => grade.id);
   const sectionIds = props.sections.map(section => section.id);
   const firstNameLabel = LABEL.FIRST_NAME;
@@ -312,7 +323,7 @@
   const dobLabel = LABEL.DOB;
   const classFieldLabel = LABEL.CLASS;
   const sectionLabel = LABEL.SECTION;
-  const guardianLabel = LABEL.GUARDIAN_NAME;
+  const parentLabel = LABEL.GUARDIAN_NAME;
   const phoneLabel = LABEL.CONTACT_NUMBER;
   const emailLabel = LABEL.STUDENT_EMAIL;
   const statusLabel = LABEL.STATUS;
@@ -358,8 +369,8 @@
         in: inOptions(sectionLabel, sectionIds),
       },
       parent_id: {
-        required: requiredField(guardianLabel),
-        in: inOptions(guardianLabel, guardianIds),
+        required: requiredField(parentLabel),
+        in: inOptions(parentLabel, parentIds),
       },
       phone: {
         phoneValidator: phoneField(phoneLabel),
@@ -374,7 +385,7 @@
         in: inOptions(statusLabel, getStatusValue()),
       },
       password: {
-        required: requiredField(passwordLabel),
+        required: requiredIfEnteredField(passwordLabel),
         password: passwordField(passwordLabel),
       },
       address: {
@@ -385,19 +396,19 @@
   });
 
   /**
-   * Fetches the list of available parents/guardians from the API.
+   * Fetches the list of available parents/parents from the API.
    * Maps the response to guardian options with id and name.
-   * Updates guardianIds for validation purposes.
+   * Updates parentIds for validation purposes.
    */
   const fetchParentNames = async () => {
-    const response = await getStudentParents();
+    const response = await getParents();
 
-    guardians.value = response.map(guardians => ({
-      id: guardians.id,
-      name: guardians.user.name,
+    parents.value = response.map(parent => ({
+      id: parent.id,
+      name: `${parent.user.first_name} ${parent.user.middle_name} ${parent.user.last_name}`,
     }));
 
-    guardianIds.value = guardians.value.map(guardian => guardian.id);
+    parentIds.value = parents.value.map(guardian => guardian.id);
   };
 
   /**
@@ -421,7 +432,10 @@
    */
   const handleSubmit = async () => {
     try {
-      const response = await submit();
+      const studentId = isEditStudent.value ? props.student.user.id : undefined;
+      const response = await submit(studentId, isEditStudent.value);
+
+      if (!response) return;
 
       if (response.success) {
         emit('showFlashMessage', {
@@ -434,7 +448,7 @@
         emit('closeModal');
       }
     } catch (error) {
-      if (backendValidationError) return;
+      if (backendValidationError.value && Object.keys(backendValidationError.value).length) return;
       emit('refreshTable');
 
       emit('closeModal');
@@ -443,21 +457,6 @@
         success: false,
         message: error.message || MESSAGE.ERROR.STUDENT_CREATION_FAILED,
       });
-    }
+    };
   };
-
-  /**
-   * Todo:
-   * 1. Move the 300ms to new config file | DONE
-   * 2. Clean tailwind classes and add constants | DONE
-   * 3. Add UI | DONE
-   * 4. Add field value (v-model, value, etch) | DONE
-   * 5. Add validation | DONE
-   * 6. When clicking outside of modal and there's unsaved changes, add confirmation | DONE
-   * 7. Add backend functionality | DONE
-   * 9. Fix email address unique validation "The email address has already been taken." | DONE
-   * 9. Add address field | DONE
-   * 10. Add clear icon every field in search | DONE
-   * 11. Add clear all button | DONE
-   */
 </script>
