@@ -73,6 +73,7 @@ export const LABEL = {
   MIDDLE_NAME: 'Middle Name',
   LAST_NAME: 'Last Name',
   ADD_STUDENT: 'Add Student',
+  EDIT_STUDENT: 'Edit Student',
   GUARDIAN_NAME: 'Guardian Name',
   STUDENT_EMAIL: 'Student Email',
   TEMP_PASSWORD: 'Temp Password',

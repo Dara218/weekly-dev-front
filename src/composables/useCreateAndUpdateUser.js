@@ -1,6 +1,9 @@
 import { ref } from "vue";
 import { MESSAGE } from "@/constants/message";
-import { createUser } from "@/services/user/createUserService";
+import {
+  createUser as createUserData,
+  updateUser as updateUserData,
+} from "@/services/user/userService";
 import useVuelidate from "@vuelidate/core";
 
 /**
@@ -20,7 +23,7 @@ export const useCreateUser = (rules, form) => {
    *
    * @returns {Promise<Object|false|undefined>} API response data or false if invalid.
    */
-  const submit = async () => {
+  const submit = async (id, isEditStudent) => {
     isSubmitBtnClicked.value = true;
     const isFormValidated = await v$.value.$validate();
 
@@ -31,7 +34,13 @@ export const useCreateUser = (rules, form) => {
     };
 
     try {
-      const response = await createUser({ ...form });
+      let response;
+
+      if (isEditStudent) {
+        response = await updateUserData(id, { ...form });
+      } else {
+        response = await createUserData({ ...form });
+      }
 
       isSubmitBtnClicked.value = false;
 
@@ -39,7 +48,7 @@ export const useCreateUser = (rules, form) => {
     } catch (error) {
       isSubmitBtnClicked.value = false;
 
-      if (error.status === 422) {
+      if (error.response?.status === 422) {
         backendValidationError.value = error.response.data.errors;
 
         return;

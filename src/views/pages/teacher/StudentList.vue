@@ -247,7 +247,7 @@
               </tr>
 
               <template v-else>
-                <tr v-for="student in students" :key="student.id">
+                <tr v-for="student in students" :key="student.user_id">
                   <td class="common-table-data">
                     <input
                       type="checkbox"
@@ -258,7 +258,7 @@
                     {{ student.admission_no }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
-                    {{ student.user.name }}
+                    {{ `${student.user.first_name} ${student.user.middle_name} ${student.user.last_name}` }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
                     {{ student.class.name.replaceAll('_', ' ') }} / {{ student.section.section_name }}
@@ -270,7 +270,7 @@
                     {{ student.gender }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
-                    {{ student.parent.user.name }}
+                    {{ `${student.parent.user.first_name} ${student.parent.user.middle_name} ${student.parent.user.last_name}` }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
                     {{ student.phone }}
@@ -289,6 +289,7 @@
                         {{ LABEL.BUTTON.VIEW_PROFILE }}
                       </button>
                       <button
+                        @click="toggleRegisterModal(student)"
                         type="button"
                         class="link-indigo cursor-pointer text-xs"
                       >
@@ -322,7 +323,7 @@
     </div>
 
     <!-- Toggle add student modal -->
-    <AddStudentModal
+    <StudentFormModal
       v-if="isOpenRegisterModal"
       :isOpenRegisterModal="isOpenRegisterModal"
       @closeModal="toggleRegisterModal"
@@ -332,6 +333,7 @@
       :classes="classes"
       :sections="sections"
       :teacher_id="user.id"
+      :student="selectedStudent"
     />
   </div>
 </template>
@@ -351,7 +353,7 @@
   import { TIMING } from '@/constants/timing';
   import { CONFIG } from '@/constants/config';
   import Spinner from '@/views/components/Spinner.vue';
-  import AddStudentModal from './components/AddStudentModal.vue';
+  import StudentFormModal from './components/StudentFormModal.vue';
   import FlashMessage from '@/views/components/FlashMessage.vue';
   import { getStudentStatusOption } from '@/composables/useCommonOption';
 
@@ -416,6 +418,11 @@
    */
   const students = ref([]);
 
+  /**
+   * The selected student when editing.
+   */
+  const selectedStudent = ref([]);
+
   // Debug
   console.log(user);
 
@@ -438,7 +445,7 @@
       } else {
         // Clear single field
         Object.assign(searchKeywords, defaultKeywords);
-      }
+      };
     };
 
     try {
@@ -462,7 +469,11 @@
   /**
    * Shows the student register modal on button click.
    */
-  const toggleRegisterModal = () => isOpenRegisterModal.value =! isOpenRegisterModal.value;
+  const toggleRegisterModal = (student) => {
+    selectedStudent.value = student;
+
+    isOpenRegisterModal.value =! isOpenRegisterModal.value;
+  }
 
   /**
    * Sets the flash message content and type.

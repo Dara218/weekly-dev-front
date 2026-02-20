@@ -5,7 +5,8 @@ export const API_ENDPOINT = {
   },
   USER: {
     GET_AUTH_USER: 'api/user',
-    CREATE_USER: 'api/user/create'
+    CREATE_USER: 'api/user/store',
+    UPDATE_USER: 'api/user/update',
   },
   STUDENT: {
     GET_STUDENT: 'api/students',
