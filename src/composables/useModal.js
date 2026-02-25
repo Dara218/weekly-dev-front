@@ -7,6 +7,7 @@ import { isEqual } from "lodash";
  * @param {Object} form - Reactive form data.
  * @param {Object} initialForm - Initial form snapshot for comparison.
  * @param {Function} emit - Vue emit function.
+ *
  * @returns {Object} Close handler.
  */
 export const isModalFieldChanged = (form, initialForm, emit) => {
@@ -25,3 +26,12 @@ export const isModalFieldChanged = (form, initialForm, emit) => {
 
     return { closeModal };
 }
+
+/**
+ * Provides a close handler .
+ *
+ * @param {Function} emit - Vue emit function.
+ *
+ * @returns {Object} Close handler.
+ */
+export const isCommonModalField = (emit) => emit('closeModal');
