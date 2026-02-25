@@ -23,6 +23,7 @@ export const LABEL = {
     CANCEL: 'Cancel',
     SAVE: 'Save',
     CLEAR_ALL: 'Clear All',
+    UPLOAD_DOCUMENT: 'Upload Document',
   },
   MESSAGE: {
     UNSAVED_CHANGES: 'You have unsaved changes. Are you sure you want to close?',
@@ -80,4 +81,15 @@ export const LABEL = {
   NOTE_LABEL: 'Note',
   CONTACT_NUMBER: 'Contact Number',
   ADDRESS: 'Address',
+  OVERVIEW: 'Overview',
+  ACADEMIC_HISTORY: 'Academic History',
+  ATTENDANCE:' Attendance',
+  EXAMS: 'Exams',
+  FEES: 'Fees',
+  DOCUMENTS: 'Documents',
+  TIMELINE: 'Timeline',
+  HEALTH: 'Health',
+  DOCUMENTS: 'Documents',
+  STUDENT_PROFILE: 'Student Profile',
+  ACADEMIC_YEAR: 'Academic Year',
 };

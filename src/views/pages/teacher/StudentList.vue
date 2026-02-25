@@ -283,6 +283,7 @@
                   <td class="common-table-data text-sm">
                     <div class="inline-flex gap-2">
                       <button
+                        @click="toggleProfileModal(student)"
                         type="button"
                         class="link-blue cursor-pointer text-xs"
                       >
@@ -325,14 +326,22 @@
     <!-- Toggle add student modal -->
     <StudentFormModal
       v-if="isOpenRegisterModal"
-      :isOpenRegisterModal="isOpenRegisterModal"
       @closeModal="toggleRegisterModal"
       @refreshTable="search"
       @showFlashMessage="setFlashMessage"
+      :isOpenRegisterModal="isOpenRegisterModal"
       :admissionYears="admissionYears"
       :classes="classes"
       :sections="sections"
       :teacher_id="user.id"
+      :student="selectedStudent"
+    />
+
+    <!-- Toggle student profile -->
+    <StudentProfileModal
+      v-if="isOpenProfileModal"
+      @closeModal="toggleProfileModal"
+      @openEditModal="toggleRegisterModal"
       :student="selectedStudent"
     />
   </div>
@@ -354,12 +363,14 @@
   import { CONFIG } from '@/constants/config';
   import Spinner from '@/views/components/Spinner.vue';
   import StudentFormModal from './components/StudentFormModal.vue';
+  import StudentProfileModal from './components/StudentProfileModal.vue';
   import FlashMessage from '@/views/components/FlashMessage.vue';
   import { getStudentStatusOption } from '@/composables/useCommonOption';
 
   const isLoading = ref(false);
   const hasSearch = ref(false);
   const isOpenRegisterModal = ref(false);
+  const isOpenProfileModal = ref(false);
   const flashMessage = ref('');
   const flashType = ref('');
 
@@ -468,12 +479,25 @@
 
   /**
    * Shows the student register modal on button click.
+   *
+   * @param {Object} student - The selected student.
    */
   const toggleRegisterModal = (student) => {
     selectedStudent.value = student;
 
     isOpenRegisterModal.value =! isOpenRegisterModal.value;
   }
+
+  /**
+   * Shows the student register modal on button click.
+   *
+   * @param {Object} student - The selected student.
+   */
+  const toggleProfileModal = (student) => {
+    selectedStudent.value = student;
+
+    isOpenProfileModal.value =! isOpenProfileModal.value;
+  };
 
   /**
    * Sets the flash message content and type.

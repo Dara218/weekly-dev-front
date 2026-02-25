@@ -230,6 +230,7 @@
   import { useCreateUser } from '@/composables/useCreateAndUpdateUser';
   import { isModalFieldChanged } from '@/composables/useModal';
   import { getParents } from '@/composables/useGetParents';
+  import { formatFullName } from '@/composables/useDataFormatter';
   import { getGenderValue, getStatusValue } from '@/composables/useCommonOption';
   import { LABEL } from '@/constants/label';
   import { CONFIG } from '@/constants/config';
@@ -405,7 +406,11 @@
 
     parents.value = response.map(parent => ({
       id: parent.id,
-      name: `${parent.user.first_name} ${parent.user.middle_name} ${parent.user.last_name}`,
+      name: formatFullName(
+        parent.user.first_name,
+        parent.user.middle_name,
+        parent.user.last_name,
+      ),
     }));
 
     parentIds.value = parents.value.map(guardian => guardian.id);

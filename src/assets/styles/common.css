@@ -65,3 +65,61 @@
 .filter-clear-icon svg {
   @apply w-3.5 h-3.5;
 }
+
+.academic-history__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.academic-history__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.academic-history__item {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.academic-history__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+}
+
+.academic-history__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.academic-history__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6b7280;
+}
+
+.academic-history__value {
+  font-size: 14px;
+  color: #111827;
+}
+
+@media (max-width: 640px) {
+  .academic-history__row {
+    grid-template-columns: 1fr;
+  }
+}

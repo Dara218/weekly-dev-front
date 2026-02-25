@@ -8,6 +8,11 @@
   @apply cursor-pointer w-full sm:flex-1 flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors;
 }
 
+/* Common navigation button */
+.button-active-navigation {
+  @apply border-b-indigo-600 border-2 cursor-pointer w-full sm:flex-1 flex justify-center py-2 px-4 border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors;
+}
+
 /* Common action button */
 .button-common-action {
   @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
@@ -16,12 +21,12 @@
 /* Modal buttons */
 .button-modal-cancel {
   @apply px-6 py-2 border border-gray-300 rounded-md text-gray-700 
-         font-medium hover:bg-gray-100 focus:outline-none 
-         focus:ring-2 focus:ring-gray-500 transition-colors;
+    font-medium hover:bg-gray-100 focus:outline-none 
+    focus:ring-2 focus:ring-gray-500 transition-colors;
 }
 
 .button-modal-save {
   @apply px-6 py-2 bg-blue-600 text-white rounded-md font-medium 
-         hover:bg-blue-700 focus:outline-none focus:ring-2 
-         focus:ring-blue-500 transition-colors cursor-pointer disabled:cursor-not-allowed disabled:bg-slate-400;
+    hover:bg-blue-700 focus:outline-none focus:ring-2 
+    focus:ring-blue-500 transition-colors cursor-pointer disabled:cursor-not-allowed disabled:bg-slate-400;
 }
