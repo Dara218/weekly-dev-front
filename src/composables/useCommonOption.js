@@ -4,6 +4,7 @@ import { LABEL } from "@/constants/label"
  * Returns the label for a student status value.
  *
  * @param {number|string} studentStatus - Student status value.
+ *
  * @returns {string} Status label.
  */
 export const getStudentStatusOption = (studentStatus) => {
