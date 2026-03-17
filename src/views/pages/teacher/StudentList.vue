@@ -27,7 +27,6 @@
       <!-- Filters Row -->
       <div class="row-filter-container">
         <div class="row-filter-wrapper">
-
           <!-- Class -->
           <div>
             <label class="row-filter-label">{{ LABEL.CLASS }}</label>
@@ -142,6 +141,7 @@
       <!-- Bulk Actions -->
       <div class="element-gap">
         <button
+          @click="toggleBulkImportModal(false)"
           type="button"
           class="button-common-action"
         >
@@ -160,6 +160,14 @@
         >
           {{ LABEL.BUTTON.CLEAR_ALL }}
         </button>
+        <button
+          @click="toggleDeleteModal(checkedStudentsId)"
+          :disabled="checkedStudentsId.length === 0"
+          type="button"
+          class="confirmation-modal__confirm cursor-pointer"
+        >
+          Delete Selected
+        </button>
       </div>
 
       <!-- Table -->
@@ -173,6 +181,8 @@
                   class="table-head"
                 >
                   <input
+                    @change="toggleAllCheckbox"
+                    :checked="isAllChecked"
                     type="checkbox"
                     class="checkbox-field"
                   />
@@ -250,15 +260,17 @@
                 <tr v-for="student in students" :key="student.user_id">
                   <td class="common-table-data">
                     <input
+                      @change="toggleRow(student.user_id)"
                       type="checkbox"
                       class="checkbox-field"
+                      :checked="checkedStudentsId.includes(student.user_id)"
                     />
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
                     {{ student.admission_no }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
-                    {{ `${student.user.first_name} ${student.user.middle_name} ${student.user.last_name}` }}
+                    {{ `${student.user?.first_name} ${student.user?.middle_name} ${student.user?.last_name}` }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
                     {{ student.class.name.replaceAll('_', ' ') }} / {{ student.section.section_name }}
@@ -297,6 +309,7 @@
                         {{ LABEL.BUTTON.EDIT }}
                       </button>
                       <button
+                        @click="toggleDeleteModal(student)"
                         type="button"
                         class="link-red cursor-pointer text-xs"
                       >
@@ -344,6 +357,20 @@
       @openEditModal="toggleRegisterModal"
       :student="selectedStudent"
     />
+
+    <!-- Bulk Import modal -->
+    <StudentBulkImport
+      v-if="isOpenBulkImportModal"
+      @closeModal="toggleBulkImportModal"
+    />
+
+    <!-- Confirmation modal -->
+    <ConfirmDeleteStudentModal
+      v-if="isDeleting"
+      @close="toggleDeleteModal"
+      @successDelete="initializeFlashMessage"
+      :student="selectedStudent"
+    />
   </div>
 </template>
 
@@ -354,11 +381,12 @@
    * Renders the admin student table with filters, search, loading state,
    * and an empty state when no students match the criteria.
    */
-  import { computed, reactive, ref } from 'vue';
+  import { computed, onMounted, reactive, ref } from 'vue';
   import { debounce } from 'lodash';
   import { getStudents } from '@/services/teacher/getStudentsService';
   import { useAuthStore } from '@/stores/useAuthStore';
   import { LABEL } from '@/constants/label';
+  import { MESSAGE } from '@/constants/message';
   import { TIMING } from '@/constants/timing';
   import { CONFIG } from '@/constants/config';
   import Spinner from '@/views/components/Spinner.vue';
@@ -366,13 +394,25 @@
   import StudentProfileModal from './components/StudentProfileModal.vue';
   import FlashMessage from '@/views/components/FlashMessage.vue';
   import { getStudentStatusOption } from '@/composables/useCommonOption';
+  import StudentBulkImport from './components/StudentBulkImport.vue';
+  import ConfirmDeleteStudentModal from './components/ConfirmDeleteStudentModal.vue';
 
+  const checkedStudentsId = ref([]);
   const isLoading = ref(false);
   const hasSearch = ref(false);
   const isOpenRegisterModal = ref(false);
   const isOpenProfileModal = ref(false);
+  const isOpenBulkImportModal = ref(false);
+  const isDeleting = ref(false);
   const flashMessage = ref('');
   const flashType = ref('');
+
+  /**
+   * Run methods before the page loads.
+  */
+  onMounted(async () => {
+    await search(defaultKeywords);
+  });
 
   /**
    * Auth store for the currently logged-in user.
@@ -413,7 +453,7 @@
     class: 0,
     section: 0,
     gender: 0,
-    status: 3,
+    status: 1,
     admission_year: 0,
     name_or_admission_number_keyword: '',
   };
@@ -433,9 +473,6 @@
    * The selected student when editing.
    */
   const selectedStudent = ref([]);
-
-  // Debug
-  console.log(user);
 
   /**
    * Fetches the filtered list of students from the API based on
@@ -462,8 +499,6 @@
     try {
       const response = await getStudents(searchKeywords);
       students.value = response.data;
-
-      console.log(students.value);
     } catch (error) {
       console.error(error);
     } finally {
@@ -487,6 +522,28 @@
 
     isOpenRegisterModal.value =! isOpenRegisterModal.value;
   }
+
+  /**
+   * Toggle the student bulk import modal.
+   */
+  const toggleBulkImportModal = async (isSuccess) => {
+    console.log(isSuccess);
+    
+    if (isSuccess) await initializeFlashMessage(MESSAGE.SUCCESS.STUDENTS_CREATED_SUCCESSFULLY);
+
+    isOpenBulkImportModal.value =! isOpenBulkImportModal.value;
+  };
+
+  /**
+   * Shows the delete modal on button click.
+   *
+   * @param {Object} student - The selected student.
+   */
+  const toggleDeleteModal = (student) => {
+    selectedStudent.value = student;
+
+    isDeleting.value =! isDeleting.value
+  };
 
   /**
    * Shows the student register modal on button click.
@@ -518,4 +575,46 @@
     flashMessage.value = null;
     flashType.value = null;
   }
+
+  /**
+   * Setup the flash message before showing it.
+   *
+   * @param message - The actual flash message.
+   */
+  const initializeFlashMessage = async (message) => {
+    const flashData = {
+      success: CONFIG.FLASH_MESSAGE_TYPE.SUCCESS,
+      message: message,
+    };
+
+    await search(defaultKeywords);
+
+    setFlashMessage(flashData);
+  }
+
+  /**
+   * Adds or removes a checked/unchecked student row.
+   *
+   * @param studentId The user id of the selected student.
+   */
+  const toggleRow = (studentId) => {
+    if (!checkedStudentsId.value.includes(studentId)) {
+      checkedStudentsId.value.unshift(studentId);
+    } else {
+      const index = checkedStudentsId.value.indexOf(studentId);
+      checkedStudentsId.value.splice(index, 1);
+    }
+  };
+
+  const toggleAllCheckbox = () => {
+    if (isAllChecked.value) {
+      checkedStudentsId.value = [];
+    } else {
+      checkedStudentsId.value = students.value.map(student => student.user_id);
+    }
+  };
+
+  const isAllChecked = computed(() => {
+    return checkedStudentsId.value.length > 0 && checkedStudentsId.value.length === students.value.length
+  });
 </script>

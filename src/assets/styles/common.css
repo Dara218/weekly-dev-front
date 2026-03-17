@@ -38,6 +38,105 @@
   @apply border-t border-gray-200;
 }
 
+/* Confirmation modal */
+.confirmation-modal {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4;
+}
+
+.confirmation-modal__container {
+  @apply w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-black/5;
+}
+
+.confirmation-modal__header {
+  @apply flex gap-3 border-b border-gray-100 px-6 py-5;
+}
+
+.confirmation-modal__icon {
+  @apply flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700 font-semibold;
+}
+
+.confirmation-modal__title {
+  @apply text-base font-semibold text-gray-900;
+}
+
+.confirmation-modal__subtitle {
+  @apply text-sm text-gray-500;
+}
+
+.confirmation-modal__body {
+  @apply px-6 py-4;
+}
+
+.confirmation-modal__message {
+  @apply text-sm text-gray-700;
+}
+
+.confirmation-modal__footer {
+  @apply flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-4;
+}
+
+/* Bulk import modal (CSS-only toggle) */
+.bulk-import-modal__container {
+  @apply bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] flex flex-col overflow-hidden;
+}
+
+.bulk-import-modal__close {
+  @apply cursor-pointer text-gray-400 hover:text-gray-600 text-2xl leading-none;
+}
+
+.bulk-import-modal__body {
+  @apply px-6 py-4 overflow-hidden flex-1;
+}
+
+.bulk-import-modal__table {
+  @apply border border-gray-200 rounded-md overflow-auto max-h-[60vh];
+}
+
+.bulk-import-modal__footer {
+  @apply bg-gray-50 border-t border-gray-200 px-6 py-4 shrink-0 flex items-center justify-end gap-2;
+}
+
+/* Bulk import box */
+.bulk-import-box {
+  @apply mb-4 grid gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:grid-cols-[1.2fr_1fr];
+}
+
+.bulk-import-box__text {
+  @apply flex flex-col gap-1;
+}
+
+.bulk-import-box__title {
+  @apply text-base font-semibold text-gray-900;
+}
+
+.bulk-import-box__subtitle {
+  @apply text-sm text-gray-600;
+}
+
+.bulk-import-box__hint {
+  @apply text-xs text-gray-500;
+}
+
+.bulk-import-box__dropzone {
+  @apply relative flex cursor-pointer flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-blue-200 bg-blue-50 px-4 py-6 text-center transition-colors hover:border-blue-300 hover:bg-blue-100;
+}
+
+.bulk-import-box__input {
+  @apply sr-only;
+}
+
+.bulk-import-box__icon {
+  @apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-xs font-semibold text-blue-600 shadow;
+}
+
+.bulk-import-box__cta {
+  @apply text-sm font-medium text-blue-700;
+}
+
+.bulk-import-box__meta {
+  @apply text-xs text-blue-600;
+}
+
 /* Info box */
 .info-box-blue {
   @apply bg-blue-50 border border-blue-200 rounded-md p-4 space-y-1;
