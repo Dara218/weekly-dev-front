@@ -7,7 +7,7 @@
         v-if="flashMessage && flashType"
         :message="flashMessage"
         :type="flashType"
-        @close="closeFlashMessage"
+        @close="handleCloseFlash"
       />
 
       <div class="flex-center-between">
@@ -393,19 +393,21 @@
   import StudentFormModal from './components/StudentFormModal.vue';
   import StudentProfileModal from './components/StudentProfileModal.vue';
   import FlashMessage from '@/views/components/FlashMessage.vue';
-  import { getStudentStatusOption } from '@/composables/useCommonOption';
+  import { getStudentStatusOption } from '@/utils/commonOptionUtils';
+  import { setFlashMessage as applyFlashMessage, closeFlashMessage } from '@/utils/flashMessageUtils';
   import StudentBulkImport from './components/StudentBulkImport.vue';
   import ConfirmDeleteStudentModal from './components/ConfirmDeleteStudentModal.vue';
 
   const checkedStudentsId = ref([]);
-  const isLoading = ref(false);
+  const flashMessage = ref('');
+  const flashType = ref('');
   const hasSearch = ref(false);
+  const isLoading = ref(false);
   const isOpenRegisterModal = ref(false);
   const isOpenProfileModal = ref(false);
   const isOpenBulkImportModal = ref(false);
   const isDeleting = ref(false);
-  const flashMessage = ref('');
-  const flashType = ref('');
+  const isAllChecked = computed(() => checkedStudentsId.value.length > 0 && checkedStudentsId.value.length === students.value.length);
 
   /**
    * Run methods before the page loads.
@@ -511,6 +513,34 @@
    * while the user is still typing in the search input.
    */
   const debounceSearch = debounce(search, TIMING.DEBOUNCE); // 300ms
+  
+  /**
+   * Sets the flash message content and type.
+   *
+   * @param {Object} flash - Flash message payload.
+   */
+  const setFlashMessage = (flash) => applyFlashMessage(flash, flashMessage, flashType);
+
+  /**
+   * Setup the flash message before showing it.
+   *
+   * @param message - The actual flash message.
+   */
+  const initializeFlashMessage = async (message) => {
+    const flashData = {
+      success: CONFIG.FLASH_MESSAGE_TYPE.SUCCESS,
+      message: message,
+    };
+
+    await search(defaultKeywords);
+
+    setFlashMessage(flashData);
+  }
+
+  /**
+   * Closes the flash message when "x" button is clicked.
+   */
+  const handleCloseFlash = () => closeFlashMessage(flashMessage, flashType);
 
   /**
    * Shows the student register modal on button click.
@@ -527,8 +557,6 @@
    * Toggle the student bulk import modal.
    */
   const toggleBulkImportModal = async (isSuccess) => {
-    console.log(isSuccess);
-    
     if (isSuccess) await initializeFlashMessage(MESSAGE.SUCCESS.STUDENTS_CREATED_SUCCESSFULLY);
 
     isOpenBulkImportModal.value =! isOpenBulkImportModal.value;
@@ -557,42 +585,6 @@
   };
 
   /**
-   * Sets the flash message content and type.
-   *
-   * @param {Object} flash - Flash message payload.
-   */
-  const setFlashMessage = (flash) => {
-    flashType.value = flash.success
-      ? CONFIG.FLASH_MESSAGE_TYPE.SUCCESS
-      : CONFIG.FLASH_MESSAGE_TYPE.ERROR;
-    flashMessage.value = flash.message;
-  };
-
-  /**
-   * Closes the flash message when "x" button is clicked.
-   */
-  const closeFlashMessage = () => {
-    flashMessage.value = null;
-    flashType.value = null;
-  }
-
-  /**
-   * Setup the flash message before showing it.
-   *
-   * @param message - The actual flash message.
-   */
-  const initializeFlashMessage = async (message) => {
-    const flashData = {
-      success: CONFIG.FLASH_MESSAGE_TYPE.SUCCESS,
-      message: message,
-    };
-
-    await search(defaultKeywords);
-
-    setFlashMessage(flashData);
-  }
-
-  /**
    * Adds or removes a checked/unchecked student row.
    *
    * @param studentId The user id of the selected student.
@@ -614,7 +606,5 @@
     }
   };
 
-  const isAllChecked = computed(() => {
-    return checkedStudentsId.value.length > 0 && checkedStudentsId.value.length === students.value.length
-  });
+  // Todo: Show uploaded documents and add "x" to delete it.
 </script>

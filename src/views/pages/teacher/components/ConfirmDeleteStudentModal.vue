@@ -40,7 +40,7 @@
 <script setup>
   import { ref } from 'vue';
   import ConfirmationModal from '@/views/components/ConfirmationModal.vue';
-  import { formatFullName } from '@/composables/useDataFormatter';
+  import { formatFullName } from '@/utils/dataFormatterUtils';
   import { useDeleteUser } from '@/composables/useDeleteUser';
   import { LABEL } from '@/constants/label';
   import { VALIDATION } from '@/constants/validation';
@@ -79,7 +79,8 @@
       isSubmitBtnClicked.value = true;
       hasError.value = false;
 
-      const response = await useDeleteUser(studentId);
+      const { handleDeleteUser } = useDeleteUser();
+      const response = await handleDeleteUser(studentId);
 
       if (response.data.success) {
         emit('successDelete', response.data.message);
