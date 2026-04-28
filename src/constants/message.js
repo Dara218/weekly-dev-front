@@ -8,5 +8,8 @@ export const MESSAGE = {
     INVALID_LOGIN_DETAILS: 'Invalid login details.',
     STUDENT_CREATION_FAILED: 'Student creation failed.',
     STUDENT_DELETION_FAILED: 'Student dELETION failed.',
+    ERROR_UPLOADING_FILE: 'Error uploading the file(s).',
+    ERROR_FETCHING_FILE: 'Error fetching the file(s).',
+    ERROR_DELETING_FILE: 'Error deleting the file(s).'
   },
 };

@@ -17,4 +17,10 @@ export const API_ENDPOINT = {
   PARENT: {
     GET_PARENT: 'api/parents',
   },
+  FILE: {
+    UPLOAD_STUDENT_FILE: 'api/students/file/upload',
+    GET_FILE_BY_ID: 'api/user/file/get',
+    DELETE_STUDENT_FILE: 'api/students/file/delete',
+  },
+  STORAGE_BUCKET: `${import.meta.env.VITE_STORAGE_BUCKET_BASE_URL}/weekly-dev/`,
 };

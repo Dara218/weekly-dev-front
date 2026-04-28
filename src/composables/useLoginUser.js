@@ -1,6 +1,6 @@
 import useVuelidate from "@vuelidate/core";
 import { computed, ref } from "vue";
-import { requiredField } from "./useValidationRules";
+import { requiredField } from "../utils/validationRulesUtils";
 import { useAuthStore } from "@/stores/useAuthStore";
 import router from "@/router";
 import { USER_ROLE } from "@/constants/userRole";

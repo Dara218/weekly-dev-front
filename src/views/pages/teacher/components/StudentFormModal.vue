@@ -228,10 +228,10 @@
   import vSelect from 'vue-select'
   import 'vue-select/dist/vue-select.css'
   import { useCreateUser } from '@/composables/useCreateAndUpdateUser';
-  import { isModalFieldChanged } from '@/composables/useModal';
-  import { getParents } from '@/composables/useGetParents';
-  import { formatFullName } from '@/composables/useDataFormatter';
-  import { getGenderValue, getStatusValue } from '@/composables/useCommonOption';
+  import { isModalFieldChanged } from '@/utils/modalTogglerUtils';
+  import { useGetParents } from '@/composables/useGetParents';
+  import { formatFullName } from '@/utils/dataFormatterUtils';
+  import { getGenderValue, getStatusValue } from '@/utils/commonOptionUtils';
   import { LABEL } from '@/constants/label';
   import { CONFIG } from '@/constants/config';
   import {
@@ -243,7 +243,7 @@
     validDate,
     phoneField,
     requiredIfEnteredField,
-  } from '@/composables/useValidationRules';
+  } from '@/utils/validationRulesUtils';
   import { cloneDeep } from 'lodash';
   import { USER_ROLE } from '@/constants/userRole';
   import { MESSAGE } from '@/constants/message';
@@ -269,12 +269,15 @@
     'refreshTable',
   ]);
 
+  /**
+   * Run methods before the page loads.
+  */
   onMounted(async () => {
     if (props.student) {
       // Pre-populate parents list so v-select can display the name
       await fetchParentNames();
     }
-  }); 
+  });
 
   /**
    * Returns the default/initial form state.
@@ -402,7 +405,8 @@
    * Updates parentIds for validation purposes.
    */
   const fetchParentNames = async () => {
-    const response = await getParents();
+    const { get } = useGetParents();
+    const response = await get();
 
     parents.value = response.map(parent => ({
       id: parent.id,
