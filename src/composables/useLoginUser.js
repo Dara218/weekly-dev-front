@@ -83,7 +83,7 @@ export const useLoginUser = (form) => {
 
         break;
       case USER_ROLE.TEACHER:
-        router.push('/teacher/dashboard');
+        router.push('/students');
 
         break;
       case USER_ROLE.PARENT:

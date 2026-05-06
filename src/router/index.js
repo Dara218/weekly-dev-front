@@ -7,7 +7,6 @@ import StudentList from '@/views/pages/teacher/StudentList.vue';
 import ResetPassword from '@/views/pages/authentication/ResetPassword.vue';
 import ParentDashboard from '@/views/pages/parent/ParentDashboard.vue';
 import StudentDashboard from '@/views/pages/student/StudentDashboard.vue';
-import TeacherDashboard from '@/views/pages/teacher/TeacherDashboard.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,16 +53,6 @@ const router = createRouter({
         role: [USER_ROLE.ADMIN, USER_ROLE.TEACHER],
       },
     },
-    // Teacher routes
-    {
-      path: '/teacher/dashboard',
-      name: 'teacher-dashboard',
-      component: TeacherDashboard,
-      meta: {
-        requiresAuth: true,
-        role: USER_ROLE.TEACHER,
-      },
-    },
     // Parent routes
     {
       path: '/parent/dashboard',
@@ -96,7 +85,7 @@ router.beforeEach(async (to, from, next) => {
     if (!allowedRoles.includes(userRole)) {
       if (auth.isStudent) next({ path: '/student/dashboard'});
       if (auth.isAdmin) next({ path: '/admin/dashboard'});
-      if (auth.isTeacher) next({ path: '/teacher/dashboard'});
+      if (auth.isTeacher) next({ path: '/students'});
       if (auth.isParent) next({ path: '/parent/dashboard'});
 
       return next('/login');

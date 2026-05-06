@@ -223,7 +223,7 @@
     { label: LABEL.DOCUMENTS, component: Documents },
     { label: LABEL.TIMELINE, component: Timeline },
     { label: LABEL.HEALTH, component: Health },
-  ]
+  ];
 
   /**
    * The selected active tab that will be displayed.
