@@ -37,7 +37,7 @@
                   {{ year.name.replaceAll('_', ' ') }}
                 </option>
               </select>
-              <span class="filter-clear-icon" @click="search('class')">
+              <span class="filter-clear-icon" @click="handleSearch('class')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -55,7 +55,7 @@
                   {{ section.section_name }}
                 </option>
               </select>
-              <span class="filter-clear-icon" @click="search('section')">
+              <span class="filter-clear-icon" @click="handleSearch('section')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -73,7 +73,7 @@
                   {{ gender.label }}
                 </option>
               </select>
-              <span class="filter-clear-icon" @click="search('gender')">
+              <span class="filter-clear-icon" @click="handleSearch('gender')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -91,7 +91,7 @@
                   {{ option.label }}
                 </option>
               </select>
-              <span class="filter-clear-icon" @click="search('status')">
+              <span class="filter-clear-icon" @click="handleSearch('status')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -109,7 +109,7 @@
                   {{ admissionYear.name }}
                 </option>
               </select>
-              <span class="filter-clear-icon" @click="search('admission_year')">
+              <span class="filter-clear-icon" @click="handleSearch('admission_year')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -128,7 +128,7 @@
                 v-model="searchKeywords.name_or_admission_number_keyword"
                 @input="debounceSearch"
               />
-              <span class="filter-clear-icon" @click="search('name_or_admission_number_keyword')">
+              <span class="filter-clear-icon" @click="handleSearch('name_or_admission_number_keyword')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -156,7 +156,7 @@
         <button
           type="button"
           class="button-common-action"
-          @click="search('all')"
+          @click="handleSearch('all')"
         >
           {{ LABEL.BUTTON.CLEAR_ALL }}
         </button>
@@ -383,7 +383,6 @@
    */
   import { computed, onMounted, reactive, ref } from 'vue';
   import { debounce } from 'lodash';
-  import { getStudents } from '@/services/teacher/getStudentsService';
   import { useAuthStore } from '@/stores/useAuthStore';
   import { LABEL } from '@/constants/label';
   import { MESSAGE } from '@/constants/message';
@@ -397,23 +396,20 @@
   import { setFlashMessage as applyFlashMessage, closeFlashMessage } from '@/utils/flashMessageUtils';
   import StudentBulkImport from './components/StudentBulkImport.vue';
   import ConfirmDeleteStudentModal from './components/ConfirmDeleteStudentModal.vue';
+  import { useSearchStudent } from '@/composables/useSearchStudent';
+  import { useToggle } from '@/composables/useToggle';
 
-  const checkedStudentsId = ref([]);
   const flashMessage = ref('');
   const flashType = ref('');
   const hasSearch = ref(false);
-  const isLoading = ref(false);
   const isOpenRegisterModal = ref(false);
-  const isOpenProfileModal = ref(false);
   const isOpenBulkImportModal = ref(false);
-  const isDeleting = ref(false);
-  const isAllChecked = computed(() => checkedStudentsId.value.length > 0 && checkedStudentsId.value.length === students.value.length);
 
   /**
    * Run methods before the page loads.
   */
   onMounted(async () => {
-    await search(defaultKeywords);
+    await handleSearch(defaultKeywords);
   });
 
   /**
@@ -460,21 +456,12 @@
     name_or_admission_number_keyword: '',
   };
 
-  /**
-   * Reactive object that holds all filter and search keyword values
-   * used when fetching the filtered list of students.
-   */
-  const searchKeywords = reactive({ ...defaultKeywords });
-
-  /**
-   * List of students returned from the API, displayed in the table.
-   */
-  const students = ref([]);
-
-  /**
-   * The selected student when editing.
-   */
-  const selectedStudent = ref([]);
+  const {
+    students,
+    isLoading,
+    searchKeywords,
+    search
+  } = useSearchStudent(defaultKeywords);
 
   /**
    * Fetches the filtered list of students from the API based on
@@ -483,29 +470,9 @@
    * Called when filters change or when the user types in the search box
    * (through the debounced wrapper).
    */
-  const search = async (field) => {
-    isLoading.value = true;
+  const handleSearch = async (field) => {
     hasSearch.value = true;
-
-    // Remove the keyword if cleared
-    if (field) {
-      if (field !== 'all') {
-        // Clear all field
-        searchKeywords[field] = defaultKeywords[field];
-      } else {
-        // Clear single field
-        Object.assign(searchKeywords, defaultKeywords);
-      };
-    };
-
-    try {
-      const response = await getStudents(searchKeywords);
-      students.value = response.data;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      isLoading.value = false;
-    }
+    await search(field);
   };
 
   /**
@@ -533,6 +500,8 @@
     };
 
     await search(defaultKeywords);
+
+    checkedStudentsId.value = [];
 
     setFlashMessage(flashData);
   }
@@ -562,49 +531,17 @@
     isOpenBulkImportModal.value =! isOpenBulkImportModal.value;
   };
 
-  /**
-   * Shows the delete modal on button click.
-   *
-   * @param {Object} student - The selected student.
-   */
-  const toggleDeleteModal = (student) => {
-    selectedStudent.value = student;
+  const {
+    checkedStudentsId,
+    isAllChecked,
+    toggleRow,
+    toggleAllCheckbox,
+    toggleDeleteModal,
+    toggleProfileModal,
+    selectedStudent,
+    isDeleting,
+    isOpenProfileModal,
+  } = useToggle(students);
 
-    isDeleting.value =! isDeleting.value
-  };
-
-  /**
-   * Shows the student register modal on button click.
-   *
-   * @param {Object} student - The selected student.
-   */
-  const toggleProfileModal = (student) => {
-    selectedStudent.value = student;
-
-    isOpenProfileModal.value =! isOpenProfileModal.value;
-  };
-
-  /**
-   * Adds or removes a checked/unchecked student row.
-   *
-   * @param studentId The user id of the selected student.
-   */
-  const toggleRow = (studentId) => {
-    if (!checkedStudentsId.value.includes(studentId)) {
-      checkedStudentsId.value.unshift(studentId);
-    } else {
-      const index = checkedStudentsId.value.indexOf(studentId);
-      checkedStudentsId.value.splice(index, 1);
-    }
-  };
-
-  const toggleAllCheckbox = () => {
-    if (isAllChecked.value) {
-      checkedStudentsId.value = [];
-    } else {
-      checkedStudentsId.value = students.value.map(student => student.user_id);
-    }
-  };
-
-  // Todo: Show uploaded documents and add "x" to delete it.
+  // Todo: Transform into component: each row-filter-label div to component
 </script>
