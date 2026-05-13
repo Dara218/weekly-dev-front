@@ -1,4 +1,5 @@
 export const LABEL = {
+  TITLE: 'Weekly Dev',
   EMAIL: 'Email',
   PASSWORD: 'Password',
   PLACEHOLDER: {
@@ -8,6 +9,7 @@ export const LABEL = {
     AUTO_GENERATED: 'AUTO-GENERATED',
     SEARCH_GUARDIAN_NAME: 'Search guardian name...',
     OPTIONAL: 'Optional',
+    SEARCH_BY_NAME_OR_EMPLOYEE_NO: 'Search by name or employee number',
   },
   BUTTON: {
     LOGIN: 'Login',
@@ -26,6 +28,9 @@ export const LABEL = {
     UPLOAD_DOCUMENT: 'Upload Document',
     IMPORT: 'Import',
     CONFIRM: 'Confirm',
+    ADD_TEACHER: 'Add Teacher',
+    DELETE_SELECTED: 'Delete Selected',
+    LOGOUT: 'Logout',
   },
   MESSAGE: {
     UNSAVED_CHANGES: 'You have unsaved changes. Are you sure you want to close?',
@@ -40,6 +45,7 @@ export const LABEL = {
     SELECT_SECTION: 'Select Section',
     SELECT_GENDER: 'Select Gender',
     SELECT_STATUS: 'Select Status',
+    SELECT_SUBJECT: 'Select Subject',
   },
   OPTIONS: {
     STATUS: [
@@ -112,5 +118,10 @@ export const LABEL = {
   NO_IMPORTED_STUDENTS: 'No imported students.',
   CONFIRM_ACTION: 'Confirm Action',
   ACTION_CANNOT_BE_UNDONE: 'This action cannot be undone. Are you sure you want to continue?',
-  DELETE_STUDENT: 'Delete Student'
+  DELETE_STUDENT: 'Delete Student',
+  TEACHERS: 'Teachers',
+  SUBJECT: 'Subject',
+  EMPLOYEE_NO: 'Employee Number',
+  HIRE_DATE: 'Hire Date',
+  PROFILE: 'Profile',
 };

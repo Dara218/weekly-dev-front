@@ -1,6 +1,6 @@
 import { MESSAGE } from "@/constants/message";
 import { USER_ROLE } from "@/constants/userRole";
-import { getAuthUser, getCsrfCookie, handleLogin } from "@/services/authentication/authUserService";
+import { getAuthUser, getCsrfCookie, handleLogin, handleLogout } from "@/services/authentication/authUserService";
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore('auth', {
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     /**
-     * Login the user with provided credentials
+     * Login the user with provided credentials.
      *
      * @param {Object} loginDetails - User login credentials (email, password)
      *
@@ -57,5 +57,22 @@ export const useAuthStore = defineStore('auth', {
         throw new Error(error.response?.data?.message || MESSAGE.ERROR.INVALID_LOGIN_DETAILS);
       }
     },
+    /**
+     * Logout the user.
+     *
+     * @throws {Error} Throws error if logout fails
+     */
+    async logout()
+    {
+      try {
+        const response = await handleLogout();
+
+        if (response.data.success) {
+          this.$reset();
+        }
+      } catch (error) {
+        throw new Error(error.response?.data?.message || MESSAGE.ERROR.FAILED_LOGOUT);
+      }
+    }
   },
 });
