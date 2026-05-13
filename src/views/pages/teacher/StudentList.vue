@@ -166,7 +166,7 @@
           type="button"
           class="confirmation-modal__confirm cursor-pointer"
         >
-          Delete Selected
+          {{ LABEL.BUTTON.DELETE_SELECTED }}
         </button>
       </div>
 
@@ -542,6 +542,4 @@
     isDeleting,
     isOpenProfileModal,
   } = useToggle(students);
-
-  // Todo: Transform into component: each row-filter-label div to component
 </script>

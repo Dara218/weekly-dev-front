@@ -6,6 +6,7 @@ export const MESSAGE = {
   },
   ERROR: {
     INVALID_LOGIN_DETAILS: 'Invalid login details.',
+    FAILED_LOGOUT: 'Failed logging out your account.',
     STUDENT_CREATION_FAILED: 'Student creation failed.',
     STUDENT_DELETION_FAILED: 'Student dELETION failed.',
     ERROR_UPLOADING_FILE: 'Error uploading the file(s).',

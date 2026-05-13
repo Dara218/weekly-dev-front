@@ -11,6 +11,14 @@ export const handleLogin = (credentials) =>
   api.post(API_ENDPOINT.AUTH.LOGIN, credentials);
 
 /**
+ * Logouts the user session.
+ *
+ * @returns {Promise} Axios response promise from the login endpoint.
+ */
+export const handleLogout = () =>
+  api.post(API_ENDPOINT.AUTH.LOGOUT);
+
+/**
  * Fetches the currently authenticated user from the backend.
  *
  * @returns {Promise} Axios response promise containing the auth user data.

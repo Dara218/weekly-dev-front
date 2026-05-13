@@ -1,0 +1,66 @@
+.navbar {
+  @apply fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between;
+}
+
+/* Logo */
+.navbar__logo {
+  @apply flex items-center space-x-2;
+}
+
+.navbar__logo-icon {
+  @apply w-8 h-8 bg-blue-600 text-white flex items-center justify-center rounded-lg font-bold;
+}
+
+.navbar__logo-text {
+  @apply text-lg font-semibold text-gray-800;
+}
+
+/* Actions */
+.navbar__actions {
+  @apply flex items-center space-x-4;
+}
+
+/* Notification */
+.navbar__icon-btn {
+  @apply relative p-2 rounded-full hover:bg-gray-100 transition;
+}
+
+.navbar__icon {
+  @apply h-6 w-6 text-gray-600;
+}
+
+.navbar__badge {
+  @apply absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full;
+}
+
+/* Dropdown */
+.navbar__dropdown {
+  @apply relative;
+}
+
+.navbar__dropdown-trigger {
+  @apply flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer;
+}
+
+.navbar__chevron {
+  @apply h-4 w-4 text-gray-500;
+}
+
+/* Menu */
+.navbar__dropdown-menu {
+  @apply absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50;
+}
+
+/* Items */
+.navbar__dropdown-item {
+  @apply block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100;
+}
+
+.navbar__dropdown-item--danger {
+  @apply text-red-600;
+}
+
+/* Overlay */
+.navbar__overlay {
+  @apply fixed inset-0 z-40;
+}
