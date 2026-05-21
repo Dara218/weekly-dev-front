@@ -270,7 +270,7 @@
                     {{ student.admission_no }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
-                    {{ `${student.user?.first_name} ${student.user?.middle_name} ${student.user?.last_name}` }}
+                    {{ `${student.user?.first_name} ${student.user.middle_name ?? ''} ${student.user?.last_name}` }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
                     {{ student.class.name.replaceAll('_', ' ') }} / {{ student.section.section_name }}
@@ -282,7 +282,7 @@
                     {{ student.gender }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
-                    {{ `${student.parent.user.first_name} ${student.parent.user.middle_name} ${student.parent.user.last_name}` }}
+                    {{ `${student.parent.user.first_name} ${student.parent.user.middle_name ?? ''} ${student.parent.user.last_name}` }}
                   </td>
                   <td class="common-table-data text-sm text-gray-900">
                     {{ student.phone }}
@@ -424,7 +424,7 @@
    * Used to populate the "Class" filter options.
    */
   const classes = computed(() =>
-    user.teacher_class_assignments.map(teacherAssign => teacherAssign.class)
+    user?.teacher_class_assignments.map(teacherAssign => teacherAssign.class)
   );
 
   /**
@@ -432,7 +432,7 @@
    * Used to populate the "Section" filter options.
    */
   const sections = computed(() =>
-    user.teacher_class_assignments.map(teacherAssign => teacherAssign.section)
+    user?.teacher_class_assignments.map(teacherAssign => teacherAssign.section)
   );
 
   /**
@@ -440,7 +440,7 @@
    * Used to populate the "Admission Year" filter options.
    */
   const admissionYears = computed(() =>
-    user.teacher_class_assignments.map(teacherAssign => teacherAssign.academic_year)
+    user?.teacher_class_assignments.map(teacherAssign => teacherAssign.academic_year)
   );
 
   /**

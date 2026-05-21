@@ -8,5 +8,4 @@ import { api } from "../common/http";
  *
  * @returns {Promise} Axios response promise containing the students collection.
  */
-export const getStudents = (keywords) =>
-  api.get(API_ENDPOINT.STUDENT.GET_STUDENT, { params: keywords });
+export const getStudents = (keywords) => api.get(API_ENDPOINT.STUDENT.GET_STUDENT, { params: keywords });
