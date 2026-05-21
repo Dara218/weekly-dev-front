@@ -18,6 +18,9 @@ export const API_ENDPOINT = {
   PARENT: {
     GET_PARENT: 'api/parents',
   },
+  TEACHER: {
+    GET_TEACHER: 'api/teachers',
+  },
   FILE: {
     UPLOAD_STUDENT_FILE: 'api/students/file/upload',
     GET_FILE_BY_ID: 'api/user/file/get',

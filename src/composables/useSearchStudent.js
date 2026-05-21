@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { getStudents } from '@/services/teacher/getStudentsService';
+import { getStudents } from '@/services/students/getStudentsService';
 
 /**
  * Composable for handling student search and filters.
