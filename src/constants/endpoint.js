@@ -26,5 +26,14 @@ export const API_ENDPOINT = {
     GET_FILE_BY_ID: 'api/user/file/get',
     DELETE_STUDENT_FILE: 'api/students/file/delete',
   },
+  CLASSES: {
+    GET_CLASSES: 'api/classes',
+  },
+  SECTION: {
+    GET_SECTION: 'api/sections',
+  },
+  ACADEMIC_YEAR: {
+    GET_ACADEMIC_YEAR: 'api/academic-years',
+  },
   STORAGE_BUCKET: `${import.meta.env.VITE_STORAGE_BUCKET_BASE_URL}/weekly-dev/`,
 };

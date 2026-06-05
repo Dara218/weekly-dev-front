@@ -288,8 +288,8 @@
                     {{ student.phone }}
                   </td>
                   <td class="common-table-data">
-                    <span class="active-text">
-                      {{ getStudentStatusOption(student.student_status) }}
+                    <span :class="teacher.user.is_active ? 'active-text' : 'inactive-text'">
+                      {{ getUserStatusOption(student.student_status) }}
                     </span>
                   </td>
                   <td class="common-table-data text-sm">
@@ -392,7 +392,7 @@
   import StudentFormModal from './components/StudentFormModal.vue';
   import StudentProfileModal from './components/StudentProfileModal.vue';
   import FlashMessage from '@/views/components/FlashMessage.vue';
-  import { getStudentStatusOption } from '@/utils/commonOptionUtils';
+  import { getUserStatusOption } from '@/utils/commonOptionUtils';
   import { setFlashMessage as applyFlashMessage, closeFlashMessage } from '@/utils/flashMessageUtils';
   import StudentBulkImport from './components/StudentBulkImport.vue';
   import ConfirmDeleteStudentModal from './components/ConfirmDeleteStudentModal.vue';
@@ -480,7 +480,7 @@
    * while the user is still typing in the search input.
    */
   const debounceSearch = debounce(search, TIMING.DEBOUNCE); // 300ms
-  
+
   /**
    * Sets the flash message content and type.
    *

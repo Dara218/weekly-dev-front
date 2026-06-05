@@ -46,6 +46,8 @@ export const LABEL = {
     SELECT_GENDER: 'Select Gender',
     SELECT_STATUS: 'Select Status',
     SELECT_SUBJECT: 'Select Subject',
+    SELECT_ACADEMIC_YEAR: 'Select Academic Year',
+    SELECT_SUBJECT: 'Select Subject',
   },
   OPTIONS: {
     STATUS: [
@@ -77,6 +79,8 @@ export const LABEL = {
     PLEASE_CONFIRM_BEFORE_PROCEEDING: 'Please confirm before proceeding.',
     THIS_WILL_DELETE_STUDENT: 'This will permanently delete the student. Continue?',
     DELETE_SELECTED_STUDENTS: 'Delete selected students?',
+    NO_CLASS_ASSIGNMENT: 'No class assignment',
+    TEACHER_ASSIGN_MULTIPLE_CLASSES: 'A teacher can be assigned to multiple classes.',
   },
   CLASS: 'Class',
   SECTION: 'Section',
@@ -85,6 +89,7 @@ export const LABEL = {
   ACTIVE: 'Active',
   INACTIVE: 'Inactive',
   NO_STUDENT_FOUND: 'No students found.',
+  NO_TEACHER_FOUND: 'No teachers found.',
   FIRST_NAME: 'First Name',
   MIDDLE_NAME: 'Middle Name',
   LAST_NAME: 'Last Name',
@@ -124,4 +129,11 @@ export const LABEL = {
   EMPLOYEE_NO: 'Employee Number',
   HIRE_DATE: 'Hire Date',
   PROFILE: 'Profile',
+  TEACHER_EMAIL: 'Teacher Email',
+  EMPLOYEE_CODE: 'Employee Code',
+  SPECIALIZATION: 'Specialization',
+  EXPERIENCE_YEARS: 'Experience (Years)',
+  CLASS_ASSIGNMENT: 'Class Assignment',
+  ASSIGN_CLASS: 'Assign Class',
+  NO_TEACHER_FOUND: 'No teachers found.',
 };
