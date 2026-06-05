@@ -4,7 +4,9 @@
     <Navbar />
   </div>
 
-  <RouterView :class="isAuthenticated ? 'sm:mt-14 mt-20' : ''"/>
+  <div :class="isAuthenticated ? 'sm:mt-14 mt-20' : ''">
+    <RouterView />
+  </div>
 </template>
 
 <script setup>

@@ -11,6 +11,7 @@ import useVuelidate from "@vuelidate/core";
  *
  * @param {Object} rules - Vuelidate rules for the form.
  * @param {Object} form - Reactive form object.
+ *
  * @returns {Object} Submission helpers and validation state.
  */
 export const useCreateUser = (rules, form) => {

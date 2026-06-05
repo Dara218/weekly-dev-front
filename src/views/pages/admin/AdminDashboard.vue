@@ -2,6 +2,14 @@
   <div class="page-table-container">
     <!-- Page Header -->
     <div class="page-header-wrapper">
+    <!-- Success Message Banner -->
+      <FlashMessage
+        v-if="flashMessage && flashType"
+        :message="flashMessage"
+        :type="flashType"
+        @close="handleCloseFlash"
+      />
+
       <div class="flex-center-between">
         <h1 class="text-large-2xl">
           {{ LABEL.TEACHERS }}
@@ -139,7 +147,19 @@
             </thead>
 
             <tbody class="table-body">
-              <tr v-for="teacher in teachers" :key="teacher.id">
+              <tr v-if="isLoading">
+                <td colspan="10" class="py-6">
+                  <Spinner />
+                </td>
+              </tr>
+
+              <tr v-else-if="teachers.length === 0">
+                <td colspan="10" class="px-4 py-8 text-center text-sm text-gray-500">
+                  {{ LABEL.NO_TEACHER_FOUND }}
+                </td>
+              </tr>
+
+              <tr v-else v-for="teacher in teachers" :key="teacher.id">
                 <!-- Checkbox -->
                 <td class="common-table-data">
                   <input
@@ -170,14 +190,13 @@
 
                 <!-- Hire Date -->
                 <td class="common-table-data text-sm text-gray-900">
-                  {{ teacher.created_at?.slice(0, 10) }}
-                  <!-- Todo: make this reusable -->
+                  {{ convertDateToIsoFormat(teacher.created_at) }}
                 </td>
 
                 <!-- Status -->
                 <td class="common-table-data">
-                  <span class="active-text">
-                    {{ getStudentStatusOption(teacher.user.is_active) }}
+                  <span :class="teacher.user.is_active ? 'active-text' : 'inactive-text'">
+                    {{ getUserStatusOption(teacher.user.is_active) }}
                   </span>
                 </td>
 
@@ -192,6 +211,7 @@
                     </button>
 
                     <button
+                      @click="toggleTeacherFormModal(teacher)"
                       type="button"
                       class="link-indigo cursor-pointer text-xs"
                     >
@@ -213,24 +233,41 @@
       </div>
     </div>
   </div>
+
+  <TeacherFormModal v-if="isOpenFormModal"
+    @close="toggleTeacherFormModal"
+    @showFlashMessage="handleFlashMessage"
+    @refreshTable="handleGetTeachers"
+    :teacher="teacher"
+    :subjects="subjects"
+  />
 </template>
 
 <script setup>
   import { ref, onMounted, reactive } from 'vue';
   import { debounce } from 'lodash';
-  import { getStudentStatusOption } from '@/utils/commonOptionUtils';
+  import { convertDateToIsoFormat, getUserStatusOption } from '@/utils/commonOptionUtils';
+  import { closeFlashMessage, setFlashMessage } from '@/utils/flashMessageUtils.js';
   import { getTeachers } from '@/services/teacher/getTeachersService';
+  import TeacherFormModal from '../teacher/TeacherFormModal.vue';
+  import FlashMessage from '@/views/components/FlashMessage.vue';
+  import Spinner from '@/views/components/Spinner.vue';
   import { LABEL } from '@/constants/label';
   import { MESSAGE } from '@/constants/message';
   import { TIMING } from '@/constants/timing';
 
+  const isOpenFormModal = ref(false);
+  const isLoading = ref(false);
   const teachers = ref([]);
   const subjects = ref([]);
+  const teacher = ref({}); // Selected teacher
   const filters = reactive({
     subject_id: null,
     status: 1,
     search: null,
   });
+  const flashMessage = ref('');
+  const flashType = ref('');
 
   /**
    * Run methods before the page loads.
@@ -248,6 +285,7 @@
    */
   const handleGetTeachers = async () => {
     try {
+      isLoading.value = true;
       const response = await getTeachers(filters);
 
       if (!response.data.success) return;
@@ -256,6 +294,8 @@
       subjects.value = response.data.data.subjects;
     } catch (error) {
       throw new Error(error.response?.data?.message || MESSAGE.ERROR.ERROR_FETCHING_DATA);
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -264,4 +304,25 @@
    * while the user is still typing in the search input.
    */
   const debounceSearch = debounce(handleGetTeachers, TIMING.DEBOUNCE); // 300ms
+
+  /**
+   * Shows the teacher register/edit modal on button click.
+   */
+  const toggleTeacherFormModal = (selectedTeacher) => {
+    teacher.value = selectedTeacher;
+
+    isOpenFormModal.value =! isOpenFormModal.value
+  };
+
+  /**
+   * Sets the flash message content and type.
+   *
+   * @param {Object} flash - Flash message payload.
+   */
+  const handleFlashMessage = (flash) => setFlashMessage(flash, flashMessage, flashType);
+
+  /**
+   * Closes the flash message when "x" button is clicked.
+   */
+  const handleCloseFlash = () => closeFlashMessage(flashMessage, flashType);
 </script>
