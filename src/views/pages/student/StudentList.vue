@@ -18,7 +18,7 @@
         <button
           type="button"
           class="button-common-action"
-          @click="toggleRegisterModal"
+          @click="toggleRegisterModal()"
         >
           {{ LABEL.BUTTON.ADD_STUDENT }}
         </button>
@@ -288,7 +288,7 @@
                     {{ student.phone }}
                   </td>
                   <td class="common-table-data">
-                    <span :class="teacher.user.is_active ? 'active-text' : 'inactive-text'">
+                    <span :class="student.student_status ? 'active-text' : 'inactive-text'">
                       {{ getUserStatusOption(student.student_status) }}
                     </span>
                   </td>
@@ -346,7 +346,7 @@
       :admissionYears="admissionYears"
       :classes="classes"
       :sections="sections"
-      :teacher_id="user.id"
+      :teacher_id="user?.id"
       :student="selectedStudent"
     />
 
@@ -424,7 +424,7 @@
    * Used to populate the "Class" filter options.
    */
   const classes = computed(() =>
-    user?.teacher_class_assignments.map(teacherAssign => teacherAssign.class)
+    user?.teacher_class_assignments?.map(teacherAssign => teacherAssign.class).filter(Boolean) ?? []
   );
 
   /**
@@ -432,7 +432,7 @@
    * Used to populate the "Section" filter options.
    */
   const sections = computed(() =>
-    user?.teacher_class_assignments.map(teacherAssign => teacherAssign.section)
+    user?.teacher_class_assignments?.map(teacherAssign => teacherAssign.section).filter(Boolean) ?? []
   );
 
   /**
@@ -440,7 +440,7 @@
    * Used to populate the "Admission Year" filter options.
    */
   const admissionYears = computed(() =>
-    user?.teacher_class_assignments.map(teacherAssign => teacherAssign.academic_year)
+    user?.teacher_class_assignments?.map(teacherAssign => teacherAssign.academic_year).filter(Boolean) ?? []
   );
 
   /**
@@ -517,10 +517,11 @@
    * @param {Object} student - The selected student.
    */
   const toggleRegisterModal = (student) => {
-    selectedStudent.value = student;
+    const isStudentRecord = Boolean(student && typeof student === 'object' && 'user_id' in student);
 
-    isOpenRegisterModal.value =! isOpenRegisterModal.value;
-  }
+    selectedStudent.value = isStudentRecord ? student : null;
+    isOpenRegisterModal.value = !isOpenRegisterModal.value;
+  };
 
   /**
    * Toggle the student bulk import modal.

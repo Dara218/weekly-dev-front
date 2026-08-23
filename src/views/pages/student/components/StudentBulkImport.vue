@@ -110,7 +110,7 @@
   const parsedErrors = ref([]);
   const hasImportedStudents = ref(false);
   const errors = ref([]);
-  const isImported = ref(true);
+  const isImported = ref(false);
 
   /**
    * Toggle the modal.
