@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     error: null,
+    unread_notification_count: 0,
   }),
   getters: {
     isAuthenticated: (state) => !!state.user,
@@ -24,6 +25,7 @@ export const useAuthStore = defineStore('auth', {
         const authUser = await getAuthUser();
 
         this.user = authUser.data;
+
       } catch (error) {
         console.error('getAuthenticatedUser error', error);
       }
@@ -73,6 +75,6 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         throw new Error(error.response?.data?.message || MESSAGE.ERROR.FAILED_LOGOUT);
       }
-    }
+    },
   },
 });

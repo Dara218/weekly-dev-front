@@ -15,11 +15,17 @@
 </template>
 
 <script setup>
+  /**
+   * Component props.
+   */
   const props = defineProps({
     message: String,
     type: String,
   });
 
+  /**
+   * Component emits.
+   */
   const emit = defineEmits('close');
 
   const close = () => emit('close');

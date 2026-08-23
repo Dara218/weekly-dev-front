@@ -14,5 +14,6 @@ export const MESSAGE = {
     ERROR_DELETING_FILE: 'Error deleting the file(s).',
     ERROR_FETCHING_DATA: 'Error fetching data.',
     USER_UPDATE_FAILED: 'User update failed.',
+    ERROR_FETCHING_NOTIFICATION_COUNT: 'Failed to fetch notification count',
   },
 };

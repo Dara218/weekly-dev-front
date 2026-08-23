@@ -36,4 +36,10 @@ export const API_ENDPOINT = {
     GET_ACADEMIC_YEAR: 'api/academic-years',
   },
   STORAGE_BUCKET: `${import.meta.env.VITE_STORAGE_BUCKET_BASE_URL}/weekly-dev/`,
+  BROADCASTING: 'broadcasting/auth',
+  NOTIFICATION: {
+    GET_UNREAD_COUNT: 'api/notification/unread-count',
+    GET_UNREAD_NOTIFICATION: 'api/notification/get-unread-notification',
+    MARK_ALL_AS_READ: 'api/notification/read-all-notification',
+  },
 };

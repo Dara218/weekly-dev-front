@@ -31,6 +31,8 @@ export const LABEL = {
     ADD_TEACHER: 'Add Teacher',
     DELETE_SELECTED: 'Delete Selected',
     LOGOUT: 'Logout',
+    VIEW_ALL_NOTIFICATION: 'View All Notifications',
+    MARK_ALL_AS_READ: 'Mark all as read',
   },
   MESSAGE: {
     UNSAVED_CHANGES: 'You have unsaved changes. Are you sure you want to close?',
@@ -136,4 +138,7 @@ export const LABEL = {
   CLASS_ASSIGNMENT: 'Class Assignment',
   ASSIGN_CLASS: 'Assign Class',
   NO_TEACHER_FOUND: 'No teachers found.',
+  UNREAD_COUNT: (count) => `You have ${count} unread notifications`,
+  JUST_NOW: 'Just now',
+  NOTIFICATIONS: 'Notifications',
 };

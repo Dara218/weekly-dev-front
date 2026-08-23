@@ -78,11 +78,12 @@
             <label class="form-label">{{ classFieldLabel }}</label>
             <select class="selectbox-field" v-model="form.class_id">
               <option value="0" selected disabled>{{ LABEL.SELECT_BOX.SELECT_CLASS }}</option>
-              <option v-for="year in classes"
+              <option
+                v-for="year in (classes ?? [])"
                 :key="year.id"
                 :value="year.id"
               >
-                {{ year.name.replaceAll('_', ' ') }}
+                {{ year?.name?.replaceAll('_', ' ') }}
               </option>
             </select>
             <p v-if="v$.class_id.$error" class="error-message">{{ v$.class_id.$errors[0].$message }}</p>
@@ -318,8 +319,8 @@
   // Field labels from constants
   const parents = ref([]);
   const parentIds = ref([]);
-  const gradeLevelIds = props.classes.map(grade => grade.id);
-  const sectionIds = props.sections.map(section => section.id);
+  const gradeLevelIds = (props.classes ?? []).filter(Boolean).map(grade => grade.id);
+  const sectionIds = (props.sections ?? []).filter(Boolean).map(section => section.id);
   const firstNameLabel = LABEL.FIRST_NAME;
   const lastNameLabel = LABEL.LAST_NAME;
   const middleNameLabel = LABEL.MIDDLE_NAME;
