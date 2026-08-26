@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-  import { onMounted } from 'vue';
+  import { computed, onMounted } from 'vue';
   import { getUnreadNotification, processUnreadNotification } from '@/services/notification/notificationService';
   import { useNotificationStore } from '@/stores/useNotificationStore';
   import { convertDateToIsoFormat } from '@/utils/commonOptionUtils';
@@ -82,7 +82,7 @@
    * Notification store for unread count and notification list.
    */
   const notifications = useNotificationStore();
-  const hasUnreadNotification = notifications.unread_notification_count > 0;
+  const hasUnreadNotification = computed(() => notifications.unread_notification_count > 0);
 
   /**
    * Fetches unread notifications from the backend and updates the store.

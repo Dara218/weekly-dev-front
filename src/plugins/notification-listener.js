@@ -22,7 +22,7 @@ export function initializeNotifications(userId) {
   window.Echo
     .private(`App.Models.User.${userId}`)
     .notification((notification) => {
-      latestNotification.value = notification;
       notifications.incrementUnreadNotificationCount();
+      latestNotification.value = notification;
     });
 }

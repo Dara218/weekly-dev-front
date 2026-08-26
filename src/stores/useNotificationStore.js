@@ -16,7 +16,7 @@ export const useNotificationStore = defineStore('notifications', {
       try {
         const { data } = await getUnreadCount();
 
-        this.unread_notification_count = data.count;
+        this.unread_notification_count = Number(data.count) || 0;
       } catch (error) {
         console.error(MESSAGE.ERROR.ERROR_FETCHING_NOTIFICATION_COUNT, error);
       }
@@ -39,15 +39,16 @@ export const useNotificationStore = defineStore('notifications', {
      */
     incrementUnreadNotificationCount()
     {
-      this.unread_notification_count++;
+      this.unread_notification_count = Number(this.unread_notification_count) + 1;
       this.fetchUnreadNotification();
     },
     /**
-     * Resets the unread notification count to zero.
+     * Resets the unread notification count and clears the unread list.
      */
     resetUnreadNotificationCount()
     {
       this.unread_notification_count = 0;
+      this.unread_notification = [];
     },
   },
 });

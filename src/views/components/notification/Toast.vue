@@ -23,11 +23,11 @@
         <!-- Content -->
         <div class="min-w-0 flex-1">
           <h3 class="truncate text-sm font-semibold text-gray-900">
-            {{ latestUnreadNotification.data.title }}
+            {{ title }}
           </h3>
 
           <p class="mt-1 wrap-break-word text-sm text-gray-600">
-            {{ latestUnreadNotification.data.message }}
+            {{ message }}
           </p>
 
           <p class="mt-2 text-xs text-gray-400">
@@ -64,7 +64,7 @@
 
 <script setup>
   import { computed } from 'vue';
-  import { useNotificationStore } from '@/stores/useNotificationStore';
+  import { latestNotification } from '@/plugins/notification-listener';
   import { LABEL } from '@/constants/label';
 
   /**
@@ -78,14 +78,20 @@
   const closeNotification = () => emit('close');
 
   /**
-   * Notification store for unread count and notification list.
+   * Title from the Echo payload (available even when the unread list is empty).
    */
-  const notifications = useNotificationStore();
+  const title = computed(() => {
+    const notification = latestNotification.value;
+
+    return notification?.title ?? notification?.data?.title ?? '';
+  });
 
   /**
-   * Gets the latest unread notification from the store.
+   * Message body from the Echo payload (available even when the unread list is empty).
    */
-  const latestUnreadNotification = computed(() => {
-    return notifications.unread_notification.at(-1);
+  const message = computed(() => {
+    const notification = latestNotification.value;
+
+    return notification?.message ?? notification?.data?.message ?? '';
   });
 </script>
