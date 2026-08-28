@@ -7,6 +7,7 @@
   <div :class="isAuthenticated ? 'sm:mt-14 mt-20' : ''">
     <RouterView />
     <Toast v-if="isHasNotification" @close="closeNotification"/>
+    <ChatBox />
   </div>
 </template>
 
@@ -23,6 +24,7 @@
   import { initializeNotifications, latestNotification } from './plugins/notification-listener';
   import Navbar from './views/components/Navbar.vue';
   import Toast from './views/components/notification/Toast.vue';
+  import ChatBox from './views/components/chat/ChatBox.vue';
 
   const auth = useAuthStore();
   const { isAuthenticated } = storeToRefs(auth);
