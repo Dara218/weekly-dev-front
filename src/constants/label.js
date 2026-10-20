@@ -10,6 +10,7 @@ export const LABEL = {
     SEARCH_GUARDIAN_NAME: 'Search guardian name...',
     OPTIONAL: 'Optional',
     SEARCH_BY_NAME_OR_EMPLOYEE_NO: 'Search by name or employee number',
+    TYPE_A_MESSAGE: 'Type a message...',
   },
   BUTTON: {
     LOGIN: 'Login',
@@ -141,4 +142,13 @@ export const LABEL = {
   UNREAD_COUNT: (count) => `You have ${count} unread notifications`,
   JUST_NOW: 'Just now',
   NOTIFICATIONS: 'Notifications',
+  SUPPORT: 'Support',
+  CHAT_STATUS: 'Online · usually replies in a few minutes',
+  CLOSE_CHAT: 'Close chat',
+  LOADING_CONVERSATION: 'Loading conversation...',
+  HOW_CAN_WE_HELP: 'How can we help?',
+  CHAT_EMPTY_MESSAGE: 'Ask about schedules, classes, or anything else — we’re here.',
+  LOADING_EARLIER_MESSAGES: 'Loading earlier messages',
+  THINKING: 'Thinking...',
+  SEND_MESSAGE: 'Send message',
 };

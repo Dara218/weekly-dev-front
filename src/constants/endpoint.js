@@ -42,4 +42,10 @@ export const API_ENDPOINT = {
     GET_UNREAD_NOTIFICATION: 'api/notification/get-unread-notification',
     MARK_ALL_AS_READ: 'api/notification/read-all-notification',
   },
+  AI_CHAT: {
+    SEND: 'api/ai/chat',
+    STREAM: 'api/ai/chat/stream',
+    CONVERSATIONS: 'api/ai/chat/conversations',
+    CONVERSATION: 'api/ai/chat/conversations', // append /{id}
+  },
 };
