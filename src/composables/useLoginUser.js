@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { requiredField } from "../utils/validationRulesUtils";
 import { useAuthStore } from "@/stores/useAuthStore";
 import router from "@/router";
+import { useRoute } from 'vue-router';
 import { USER_ROLE } from "@/constants/userRole";
 
 /**
@@ -23,6 +24,7 @@ import { USER_ROLE } from "@/constants/userRole";
  * }}
  */
 export const useLoginUser = (form) => {
+  const route = useRoute();
   const isSubmitBtnClicked = ref(false);
   const errorMessage = ref('');
 
@@ -57,7 +59,18 @@ export const useLoginUser = (form) => {
       await auth.login({ ...form });
 
       // Set redirection
-      checkUserRole(auth.user.role);
+      const redirect = route.query.redirect;
+      const canOpenFees = auth.isStudent || auth.isParent;
+      if (
+        canOpenFees
+        && typeof redirect === 'string'
+        && redirect.startsWith('/fees')
+        && !redirect.startsWith('//')
+      ) {
+        router.push(redirect);
+      } else {
+        checkUserRole(auth.user.role);
+      }
     } catch (error) {
       form.password = null;
       v$.value.password.$reset();
@@ -87,7 +100,7 @@ export const useLoginUser = (form) => {
 
         break;
       case USER_ROLE.PARENT:
-        router.push('/student/dashboard/');
+        router.push('/parent/dashboard');
 
         break;
       default:

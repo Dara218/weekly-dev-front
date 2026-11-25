@@ -8,6 +8,13 @@
 
     <!-- Right -->
     <div class="navbar__actions">
+      <RouterLink
+        v-if="auth.isStudent || auth.isParent"
+        :to="{ name: 'fees' }"
+        class="navbar__dropdown-item"
+      >
+        {{ LABEL.FEES }}
+      </RouterLink>
       <!-- Notification -->
       <div class="relative">
         <button
