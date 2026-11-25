@@ -15,5 +15,6 @@ export const MESSAGE = {
     ERROR_FETCHING_DATA: 'Error fetching data.',
     USER_UPDATE_FAILED: 'User update failed.',
     ERROR_FETCHING_NOTIFICATION_COUNT: 'Failed to fetch notification count',
+    INVALID_STRIPE_PAYMENT_URL: 'The API returned an invalid Stripe payment URL.',
   },
 };

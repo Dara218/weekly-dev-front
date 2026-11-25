@@ -12,6 +12,15 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/fees',
+      name: 'fees',
+      component: () => import('@/views/pages/fees/InvoicePayment.vue'),
+      meta: {
+        requiresAuth: true,
+        role: [USER_ROLE.STUDENT, USER_ROLE.PARENT],
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login,

@@ -48,4 +48,10 @@ export const API_ENDPOINT = {
     CONVERSATIONS: 'api/ai/chat/conversations',
     CONVERSATION: 'api/ai/chat/conversations', // append /{id}
   },
+  FEES: {
+    GET_INVOICES: 'api/invoices',
+    PAY_INVOICE: 'api/invoices', // append /{id}/pay
+    PAY_OVERDUE: 'api/invoices/pay-overdue',
+    PARENT_CHILDREN: 'api/parent/children',
+  },
 };
